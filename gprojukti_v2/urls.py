@@ -22,11 +22,12 @@ from django.views.static import serve
 from rest_framework import permissions
 from drf_yasg2.views import get_schema_view
 from drf_yasg2 import openapi
+from gprojukti_v2.views import health_check
 
 schema_view = get_schema_view(
     openapi.Info(
 
-        title="gProjukti.com",
+        title="GProjukti.com",
         default_version='v2',
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -54,6 +55,7 @@ v2_patterns = [
 
 urlpatterns = [
         path('admin/', admin.site.urls),
+        path('health_check/', health_check),
         path('api/', include([
         path('v2.0/', include(v2_patterns))
                   ])),

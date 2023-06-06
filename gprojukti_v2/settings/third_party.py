@@ -7,9 +7,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissions',
     ),
 
-    'DEFAULT_RENDERER_CLASSES': (
-        # 'gprojukti_v2.apis.renderers.DefaultRenderer',
-    ),
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     # 'gprojukti_v2.apis.renderers.DefaultRenderer',
+    # ),
     "DEFAULT_PAGINATION_CLASS": "utils.custom_pagination.CustomPagination",
 
     'DEFAULT_FILTER_BACKENDS': (
@@ -27,10 +27,10 @@ REST_FRAMEWORK = {
 
 }
 
-if DEBUG:
-    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] + (
-        # 'gprojukti.apis.renderers.OnlyRawBrowsableAPIRenderer',
-    )
+# if DEBUG:
+#     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] + (
+#         # 'gprojukti.apis.renderers.OnlyRawBrowsableAPIRenderer',
+#     )
 # if not DEBUG:
 #     REST_FRAMEWORK['EXCEPTION_HANDLER'] = 'base.exceptions.custom_exception_handler'
 
