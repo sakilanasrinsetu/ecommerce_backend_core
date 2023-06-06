@@ -11,7 +11,7 @@
 
 # Project ERD Diagram
 
-<img src="https://github.com/sakilanasrinsetu/gprojukti_v2/erd.png?raw=true" width =100% >
+<img src="https://github.com/sakilanasrinsetu/gprojukti_v2/blob/main/erd.png?raw=true" width =100% >
 
 
 # Project requirement setup
