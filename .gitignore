@@ -156,6 +156,9 @@ static_cdn/
 .idea/
 sqlite3
 db.sqlite3
+.vscode/
+
+
 
 
 # PyCharm

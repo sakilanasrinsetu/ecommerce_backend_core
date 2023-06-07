@@ -34,6 +34,7 @@ class ResponseWrapper(Response):
         # response parse
         pagination = {
             "count": None,
+            "page_size": None,
             "next": None,
             "previous": None
         }
@@ -42,6 +43,7 @@ class ResponseWrapper(Response):
                 try:
                     if data.get("results") is not None:
                         pagination["count"] = data.pop("count")
+                        # pagination["page_size"] = data.pop("page_size")
                         pagination["next"] = data.pop("next")
                         pagination["previous"] = data.pop("previous")
                         data = data.pop("results")

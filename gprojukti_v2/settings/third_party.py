@@ -27,6 +27,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
     'DATETIME_FORMAT': '%b %d at %I:%M %P',
     'TIME_FORMAT': '%I:%M %P',
+    'PAGE_SIZE': 20
 
 }
 
