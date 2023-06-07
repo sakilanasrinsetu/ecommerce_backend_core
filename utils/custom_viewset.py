@@ -48,7 +48,8 @@ class CustomViewSet(viewsets.ModelViewSet):
         serializer = serializer_class(data=request.data)
         if serializer.is_valid():
             qs = serializer.save(
-                **request.data
+                **request.data, 
+                created_by=self.request.user
             )
 
             request_method = request.method

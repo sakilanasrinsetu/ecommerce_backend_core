@@ -28,7 +28,6 @@ class PublicBlogViewSet(CustomViewSet):
             return ResponseWrapper(
                 error_msg="Blog is Already Found", error_code=406, status=406
             )
-        request.data['created_by'] = request.user
         return super(PublicBlogViewSet, self).create(request, *args,
                                                      **kwargs)
 

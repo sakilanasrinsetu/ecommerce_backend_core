@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -25,6 +26,12 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         app_label = 'base'
+
+    def save(self, *args, **kwargs):
+        # Update the 'updated_at' field before saving the model
+        self.updated_at = timezone.now()
+
+        super(BaseModel, self).save(*args, **kwargs)
 
 
 class CustomQuerySetManager(models.QuerySet):
@@ -172,3 +179,10 @@ class OrderCustomerType(models.TextChoices):
 class DeliveryChargeCityTypeOptions(models.TextChoices):
     INSIDE_DHAKA = 'inside_dhaka', _('inside_dhaka')
     OUTSIDE_DHAKA = 'outside_dhaka', _('outside_dhaka')
+
+
+class StructureChoices(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    STANDALONE = 'standalone', 'Stand-alone product'
+    PARENT = 'parent', 'Parent'
+    CHILD = 'child', 'Child'
