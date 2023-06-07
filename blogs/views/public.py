@@ -26,7 +26,8 @@ class PublicBlogViewSet(CustomViewSet):
         qs = Blog.objects.filter(title = request.data.get("title")).last()
         if qs:
             return ResponseWrapper(
-                error_msg="Blog is Already Found", error_code=406, status=406
+                error_msg="Blog is Already Found", 
+                error_code=406, status=406
             )
         return super(PublicBlogViewSet, self).create(request, *args,
                                                      **kwargs)

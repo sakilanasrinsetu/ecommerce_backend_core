@@ -110,9 +110,9 @@ class Category(BaseModel):
         self._clean_standalone()
         pass
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.attr.save()
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     self.attr.save()
 
     @property
     def is_standalone(self):

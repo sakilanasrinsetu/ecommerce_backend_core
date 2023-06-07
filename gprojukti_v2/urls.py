@@ -40,7 +40,25 @@ schema_urlpatterns = [
 
 v2_patterns = [
     path('users/', include('user.urls', namespace='user.apis')),
+    path('catalog/', include('catalog.urls', namespace='catalog.apis')),
+    # path('products/', include('products.urls', namespace='products.apis')),
+    # path('store/', include('store.urls', namespace='store.apis')),
+    # path('supplier/', include('supplier.urls', namespace='supplier.apis')),
+    # path('campaigns/', include('campaigns.urls', namespace='campaigns.apis')),
+    # path('configuaration/', include('configuaration.urls', namespace='configuaration.apis')),
+    # path('stock/', include('stock.urls', namespace='stock.apis')),
+    # path('purchase/', include('purchase.urls', namespace='purchase.apis')),
     path('blogs/', include('blogs.urls', namespace='blogs.apis')),
+    # path('sell/', include('orders.urls', namespace='orders.apis')),
+    # path('payment/', include('payment.urls', namespace='payment.apis')),
+    # path('promo/', include('promo.urls', namespace='promo.apis')),
+    # path('repair/', include('repair.urls', namespace='repair.apis')),
+    # path('pc_builder/', include('pc_builder.urls', namespace='pc_builder.apis')),
+    # path('pos/', include('point_of_sale.urls', namespace='point_of_sale.apis')),
+    # path('locations/', include('locations.urls', namespace='locations.apis')),
+    # path('image-upload', image_upload),
+    # path('ordering-update', ordering_update),
+    # path('featured-ordering-update', featured_ordering_update),
 
 ]
 
