@@ -1,6 +1,7 @@
 from django.urls import path
 from catalog.views.admin import (
-    AdminProductGroupViewSet
+    AdminProductGroupViewSet,
+    AdminCategoryViewSet
 )
 
 app_name = 'admin'
@@ -11,5 +12,11 @@ urlpatterns = [
                       name="product_groups"),
     path('product_groups/<pk>/', AdminProductGroupViewSet.as_view(
         {"patch": "update", 'delete':'destroy', 'get':'retrieve'}),
-                      name="blog"),
+                      name="product_groups"),
+    path('category/', AdminCategoryViewSet.as_view(
+        {"get": "list", 'post':'create'}),
+                      name="category"),
+    path('category/<pk>/', AdminCategoryViewSet.as_view(
+        {"patch": "update", 'delete':'destroy', 'get':'retrieve'}),
+                      name="category"),
 ]

@@ -3,7 +3,7 @@ from django_filters.rest_framework import FilterSet
 
 from django.db.models import Count, Min, Q, query_utils
 
-from catalog.models import ProductGroup
+from catalog.models import ProductGroup, Category
 
 
 class ProductGroupFilter(FilterSet):
@@ -57,3 +57,13 @@ class ProductGroupFilter(FilterSet):
             queryset = queryset.filter(Q(is_active = is_active) | Q(is_featured = is_featured) |Q(show_in_ecommerce = show_in_ecommerce)| Q(slug__icontains=slug))
         
         return queryset
+    
+
+
+class CategoryFilter(FilterSet):
+
+    class Meta:
+        model = Category
+        fields = (
+            "name",
+        )

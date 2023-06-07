@@ -8,10 +8,14 @@ from utils.actions import send_action
 
 def object_get(object_qs , **kwargs):
     if kwargs.get("pk"):
-        pk = kwargs["pk"].isdigit()
-        if pk:
-            instance = object_qs.filter(Q(slug__iexact = str(pk)) | Q(pk = pk)).last()
-            return instance
+        pk = kwargs["pk"]
+
+        if not pk.isdigit():
+            instance = object_qs.filter(slug__iexact = str(pk)).last()
+        else:
+            instance = object_qs.filter(pk = pk).last()
+        
+        return instance
         
     elif kwargs.get("slug"):
         slug = kwargs["slug"]
