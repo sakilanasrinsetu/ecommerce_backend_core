@@ -14,37 +14,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include,  re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
-# from django.conf.urls import url
 from rest_framework import permissions
-from drf_yasg2.views import get_schema_view
-from drf_yasg2 import openapi
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from rest_framework import routers
+
 from gprojukti_v2.views import health_check
 
-schema_view = get_schema_view(
-    openapi.Info(
+router = routers.DefaultRouter()
 
-        title="GProjukti.com",
-        default_version='v2',
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@gprojukti.com"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
 
-swagger_url = [
-    path('api/swagger.json/',
-         schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('', schema_view.with_ui('swagger',
-                                 cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc',
-                                       cache_timeout=0), name='schema-redoc'),
+
+schema_urlpatterns = [
+    path("spectacular/", SpectacularAPIView.as_view(), name="schema"),
+    path("",SpectacularSwaggerView.as_view(url_name="schema"),name="doc",),
+    path("redoc/", SpectacularRedocView.as_view(url_name="schema"),name="redoc",),
 ]
 
 v2_patterns = [
@@ -60,7 +51,7 @@ urlpatterns = [
         path('v2.0/', include(v2_patterns))
                   ])),
 
-              ] + swagger_url
+              ] + schema_urlpatterns
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + \

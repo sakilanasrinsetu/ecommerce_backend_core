@@ -21,10 +21,11 @@ THIRD_PARTY_APPS = [
     # 'simple_history',
     # 'cacheops',
     'django_filters',
-    'drf_yasg2',
+    # 'drf_yasg2',
 
     'actstream',
     'django_extensions',
+    'drf_spectacular',
 ]
 
 LOCAL_APPS = [

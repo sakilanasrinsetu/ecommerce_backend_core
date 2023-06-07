@@ -4,12 +4,15 @@ from gprojukti_v2.settings.base import timedelta
 REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.AllowAny',
     ),
 
     # 'DEFAULT_RENDERER_CLASSES': (
     #     # 'gprojukti_v2.apis.renderers.DefaultRenderer',
     # ),
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
     "DEFAULT_PAGINATION_CLASS": "utils.custom_pagination.CustomPagination",
 
     'DEFAULT_FILTER_BACKENDS': (
@@ -147,3 +150,25 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# DRF Spectacular for api organised view
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "GProjukti API'S",
+    "DESCRIPTION": "GProjukti Online Shopping Destination ",
+    "VERSION": "2.0.1",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "queryConfigEnabled": True,
+        "persistAuthorization": True,
+        "tryItOutEnabled": True,
+    },
+    "PARSER_WHITELIST": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.FileUploadParser",
+    ],
+}

@@ -23,6 +23,7 @@ from utils.permissions import CheckCustomPermission
 from user.serializers import LoginSerializer
 from utils.response_wrapper import ResponseWrapper
 from utils.custom_viewset import CustomViewSet
+from rest_framework.permissions import AllowAny
 
 
 # Create your views here.
@@ -30,6 +31,7 @@ from utils.custom_viewset import CustomViewSet
 
 class LoginViewSet(CustomViewSet):
     serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         try:
