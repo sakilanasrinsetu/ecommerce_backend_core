@@ -161,8 +161,6 @@ class AdminCategoryViewSet(CustomViewSet):
                 error_code=406, status=406
             )
 
- 
-        
         name = request.data.get("name") or qs.name
         status = request.data.get("status") or qs.status
 
