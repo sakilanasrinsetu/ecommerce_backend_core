@@ -169,7 +169,7 @@ class AdminCategoryViewSet(CustomViewSet):
         if request.data.get( "category_parent"):
             category_parent = request.data.get( "category_parent")
         elif qs.category_parent: 
-            category_parent = qs.category_parent.id 
+            category_parent= qs.category_parent.id 
         else:
             category_parent = None
 

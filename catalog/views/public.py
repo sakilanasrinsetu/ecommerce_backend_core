@@ -15,24 +15,19 @@ class PublicCategoryViewSet(CustomViewSet):
     def retrieve(self, request, *args, **kwargs):
         qs = Category.objects.all()
 
-        if kwargs.get("pk"):
-            pk = kwargs.get("pk")
-            if not pk.isdigit():
-                qs = qs.filter(slug__iexact = str(pk)).last()
-            else:
-                qs = qs.filter(pk = pk).last()
-        
-        else:
-            slug = kwargs["slug"]
+        # ***Note*** ...***... In slug Param user can give slug or id ....***....
 
-            if not slug.isdigit():
-                qs = qs.filter(slug__iexact = slug).last()
-            else:
-                qs = qs.filter(pk = int(slug)).last()
+        slug = kwargs["slug"]
+
+        if not slug.isdigit():
+            qs = qs.filter(slug__iexact = slug).last()
+        else:
+            qs = qs.filter(pk = int(slug)).last()
 
         if qs:
             serializer = self.get_serializer(qs)
             return ResponseWrapper(data = serializer.data, msg="Success")
         
         else:
-            return ResponseWrapper(error_msg="Not found", error_code=404, status=404)
+            return ResponseWrapper(error_msg="Not found", error_code=404,
+                                    status=404)
