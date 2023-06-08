@@ -26,6 +26,7 @@ THIRD_PARTY_APPS = [
     'actstream',
     'django_extensions',
     'drf_spectacular',
+    'dj_rest_auth.registration',
 ]
 
 LOCAL_APPS = [

@@ -52,7 +52,6 @@ class CustomViewSet(viewsets.ModelViewSet):
         serializer = serializer_class(data=request.data)
         if serializer.is_valid():
             qs = serializer.save(
-                **request.data, 
                 created_by=self.request.user
             )
 
@@ -62,8 +61,10 @@ class CustomViewSet(viewsets.ModelViewSet):
             response_data = serializer.data
 
             # Save Logger for Tracking 
-            
-            send_action(qs, request_method, request_url,request_data, response_data)
+            try:
+                send_action(qs, request_method, request_url,request_data, response_data)
+            except:
+                pass
 
             return ResponseWrapper(data=serializer.data, msg='created', status=200)
         else:

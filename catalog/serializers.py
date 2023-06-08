@@ -24,6 +24,10 @@ class ProductGroupSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     created_by = serializers.CharField(read_only=True)
     updated_by = serializers.CharField(read_only=True)
+    product_group = serializers.PrimaryKeyRelatedField(
+        read_only=False, queryset=ProductGroup.objects.all()
+    )
+    child = serializers.SerializerMethodField(read_only = True)
 
     class Meta:
         model = Category
@@ -32,5 +36,14 @@ class CategorySerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         self.fields["created_by"] = CreatedBySerializer(read_only=True)
         self.fields["updated_by"] = UpdatedBySerializer(read_only=True)
+        self.fields["product_group"] = ProductGroupSerializer()
 
         return super(CategorySerializer, self).to_representation(instance)
+
+    def get_child(self, obj):
+        a = 'gfb'
+        if obj.status == "parent":
+            qs = Category.objects.filter(category_parent = obj)
+            serializer = CategorySerializer(qs, many = True)
+            return serializer.data
+        return None

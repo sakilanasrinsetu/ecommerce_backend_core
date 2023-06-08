@@ -5,6 +5,7 @@ from gprojukti_v2.settings.base import BASE_DIR
 # django vars
 # AUTH_USER_MODEL = 'user.User'
 
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Dhaka'

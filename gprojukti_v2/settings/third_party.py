@@ -22,7 +22,10 @@ REST_FRAMEWORK = {
     ),
 
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
     'DATETIME_FORMAT': '%b %d at %I:%M %P',
@@ -30,6 +33,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 
 }
+
+# AUTHENTICATION_BACKENDS = [
+#     "user.backends.EmailPhoneUsernameAuthenticationBackend"
+# ]  # <-- Untested with dj_rest_auth package
 
 # if DEBUG:
 #     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] + (
@@ -177,6 +184,7 @@ SPECTACULAR_SETTINGS = {
         "queryConfigEnabled": True,
         "persistAuthorization": True,
         "tryItOutEnabled": True,
+        "displayRequestDuration": True,
     },
     "PARSER_WHITELIST": [
         "rest_framework.parsers.JSONParser",
@@ -184,4 +192,5 @@ SPECTACULAR_SETTINGS = {
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.FileUploadParser",
     ],
+
 }

@@ -183,6 +183,6 @@ class DeliveryChargeCityTypeOptions(models.TextChoices):
 
 class StructureChoices(models.TextChoices):
     """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
-    STANDALONE = 'standalone', 'Stand-alone product'
+    STANDALONE = 'standalone', 'Stand-alone category'
     PARENT = 'parent', 'Parent'
     CHILD = 'child', 'Child'
