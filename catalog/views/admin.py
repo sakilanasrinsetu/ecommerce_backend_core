@@ -1,5 +1,6 @@
-from catalog.serializers import ProductGroupSerializer, CategorySerializer
-from catalog.models import ProductGroup, Category
+from catalog.serializers import (ProductGroupSerializer, CategorySerializer,
+                                 TaxCategorySerializer, ProductBrandSerializer)
+from catalog.models import ProductGroup, Category, TaxCategory, ProductBrand
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
 from utils.custom_viewset import CustomViewSet
@@ -7,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from utils.response_wrapper import ResponseWrapper
 from catalog.filters import ProductGroupFilter, CategoryFilter
 from utils.actions import send_action
+from django.db.models import Q
+
 
 
 class AdminProductGroupViewSet(CustomViewSet):
@@ -280,3 +283,62 @@ class AdminCategoryViewSet(CustomViewSet):
             pass
 
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
+
+
+class AdminTaxCategoryViewSet(CustomViewSet):
+    queryset = TaxCategory.objects.all()
+    serializer_class = TaxCategorySerializer
+    lookup_field = "slug"
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action in ["create", "update", "delete"]:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+    
+
+    def create(self, request, *args, **kwargs):
+        qs = TaxCategory.objects.filter(name = request.data.get("name")).last()
+        if qs:
+            return ResponseWrapper(
+                error_msg="Tax Category is Already Found", 
+                error_code=406, status=406
+            )
+        return super(AdminTaxCategoryViewSet, self).create(request, *args,
+                                                     **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        qs = TaxCategory.objects.filter(name = request.data.get("name")).exclude(slug = kwargs.get("slug")).last()
+        if qs:
+            return ResponseWrapper(
+                error_msg="Tax Category is Already Found", 
+                error_code=406, status=406
+            )
+        return super(AdminTaxCategoryViewSet, self).update(request, *args,
+                                                     **kwargs)
+
+class AdminProductBrandViewSet(CustomViewSet):
+    queryset = ProductBrand.objects.all()
+    serializer_class = ProductBrandSerializer
+    lookup_field = "pk"
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action in ["create", "update", "delete"]:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+    
+
+    def create(self, request, *args, **kwargs):
+        qs = ProductBrand.objects.filter(name = request.data.get("name")).last()
+        if qs:
+            return ResponseWrapper(
+                error_msg="Product Brand is Already Found", 
+                error_code=406, status=406
+            )
+        return super(AdminProductBrandViewSet, self).create(request, *args,
+                                                     **kwargs)

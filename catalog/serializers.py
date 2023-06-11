@@ -2,28 +2,20 @@
 from catalog.models import ProductGroup, Category, ProductBrand, TaxCategory
 from rest_framework import serializers
 from base.serializers import CreatedBySerializer,UpdatedBySerializer
+from base.serializers import BaseModelSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
-class ProductGroupSerializer(serializers.ModelSerializer):
-    created_by = serializers.CharField(read_only=True)
-    updated_by = serializers.CharField(read_only=True)
+class ProductGroupSerializer(BaseModelSerializer):
 
     class Meta:
         model = ProductGroup
         fields = "__all__"
 
-    def to_representation(self, instance):
-        self.fields["created_by"] = CreatedBySerializer(read_only=True)
-        self.fields["updated_by"] = UpdatedBySerializer(read_only=True)
 
-        return super(ProductGroupSerializer, self).to_representation(instance)
-
-class CategorySerializer(serializers.ModelSerializer):
-    created_by = serializers.CharField(read_only=True)
-    updated_by = serializers.CharField(read_only=True)
+class CategorySerializer(BaseModelSerializer):
     product_group = serializers.PrimaryKeyRelatedField(
         read_only=False, queryset=ProductGroup.objects.all()
     )
@@ -34,8 +26,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def to_representation(self, instance):
-        self.fields["created_by"] = CreatedBySerializer(read_only=True)
-        self.fields["updated_by"] = UpdatedBySerializer(read_only=True)
         self.fields["product_group"] = ProductGroupSerializer()
 
         return super(CategorySerializer, self).to_representation(instance)
@@ -46,3 +36,16 @@ class CategorySerializer(serializers.ModelSerializer):
             serializer = CategorySerializer(qs, many = True)
             return serializer.data
         return None
+    
+class TaxCategorySerializer(BaseModelSerializer):
+
+    class Meta:
+        model = TaxCategory
+        fields = "__all__"
+    
+class ProductBrandSerializer(BaseModelSerializer):
+
+    class Meta:
+        model = ProductBrand
+        fields = "__all__"
+    

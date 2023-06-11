@@ -74,6 +74,9 @@ class CustomViewSet(viewsets.ModelViewSet):
     # ..........***.......... Update ..........***..........
 
     def update(self, request, **kwargs):
+        if request.data.get("slug"):
+            slug = request.data.pop("slug")
+
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data, partial=True)
 
@@ -81,7 +84,19 @@ class CustomViewSet(viewsets.ModelViewSet):
             object_qs = self.queryset
             qs = object_get(object_qs, **kwargs)
 
+            if not qs:
+                return ResponseWrapper(error_code=406, error_msg='Not Found', status=406)
+
+            if slug and kwargs.get("slug"):
+                slug_check_qs = self.queryset.filter(slug = slug).exclude(slug = kwargs.get("slug"))
+                if slug_check_qs:
+                    return ResponseWrapper(error_code=406, error_msg='SLug is Already Exist', status=406)
+            
             qs = serializer.update(instance=qs, validated_data=serializer.validated_data)
+
+            if slug:
+                qs.slug = slug
+                qs.save()
 
             try:
                 if qs:
@@ -89,6 +104,8 @@ class CustomViewSet(viewsets.ModelViewSet):
                     qs.save()
             except:
                 qs = qs
+
+            serializer = self.serializer_class(instance=qs)
 
             # Save Logger for Tracking 
 
@@ -102,7 +119,6 @@ class CustomViewSet(viewsets.ModelViewSet):
             except:
                 pass
 
-            serializer = self.serializer_class(instance=qs)
             return ResponseWrapper(data=serializer.data)
         else:
             return ResponseWrapper(error_msg=serializer.errors, error_code=400)
