@@ -59,11 +59,36 @@ class ProductGroupFilter(FilterSet):
         return queryset
     
 
-
 class CategoryFilter(FilterSet):
+    group__slug = django_filters.CharFilter(label="group__slug",
+                                         method="filter_category")
+    has_child = django_filters.BooleanFilter(label="has_child",
+                                       method="filter_category")
+    is_active = django_filters.BooleanFilter(label="is_active",
+                                       method="filter_category")
+    is_featured = django_filters.CharFilter(label="is_featured",
+                                        method="filter_category")
+    show_in_ecommerce = django_filters.CharFilter(label="show_in_ecommerce",
+                                       method="filter_category")
 
     class Meta:
         model = Category
         fields = (
-            "name",
+            "group__slug",
+            "has_child",
+            "is_featured",
+            "is_active",
+            "show_in_ecommerce",
         )
+    
+    def filter_category(self, queryset, name, value):
+        group__slug = self.data.get('group__slug')
+        has_child = self.data.get('has_child')
+        is_featured = self.data.get('is_featured')
+        is_active = self.data.get('is_active')
+        show_in_ecommerce = self.data.get('show_in_ecommerce')
+        
+        #TODO:
+        # if group__slug
+
+        return queryset
