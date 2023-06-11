@@ -55,12 +55,13 @@ class CustomViewSet(viewsets.ModelViewSet):
                 created_by=self.request.user
             )
 
+            # Save Logger for Tracking 
+
             request_method = request.method
             request_url = request.build_absolute_uri()
             request_data = request.data 
             response_data = serializer.data
 
-            # Save Logger for Tracking 
             try:
                 send_action(qs, request_method, request_url,request_data, response_data)
             except:
@@ -89,6 +90,18 @@ class CustomViewSet(viewsets.ModelViewSet):
             except:
                 qs = qs
 
+            # Save Logger for Tracking 
+
+            request_method = request.method
+            request_url = request.build_absolute_uri()
+            request_data = request.data 
+            response_data = serializer.data
+
+            try:
+                send_action(qs, request_method, request_url,request_data, response_data)
+            except:
+                pass
+
             serializer = self.serializer_class(instance=qs)
             return ResponseWrapper(data=serializer.data)
         else:
@@ -102,6 +115,7 @@ class CustomViewSet(viewsets.ModelViewSet):
 
         if qs:
             qs.delete()
+
             return ResponseWrapper(status=200, msg='deleted')
         else:
             return ResponseWrapper(error_msg="failed to delete", error_code=400)

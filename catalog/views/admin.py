@@ -6,6 +6,7 @@ from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated
 from utils.response_wrapper import ResponseWrapper
 from catalog.filters import ProductGroupFilter, CategoryFilter
+from utils.actions import send_action
 
 
 class AdminProductGroupViewSet(CustomViewSet):
@@ -127,10 +128,21 @@ class AdminCategoryViewSet(CustomViewSet):
             created_by=self.request.user
         )
         if qs.status == "child":
-            a ='df'
             if qs.category_parent.status == 'standalone' or qs.category_parent.status == 'child':
                 qs.category_parent.status = "parent"
                 qs.category_parent.save()
+
+        # Save Logger for Tracking 
+        request_method = request.method
+        request_url = request.build_absolute_uri()
+        request_data = request.data 
+        response_data = serializer.data
+        
+        try:
+            send_action(qs, request_method, request_url,
+                        request_data, response_data)
+        except:
+            pass
 
         serializer = self.serializer_class(qs)
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
@@ -254,4 +266,17 @@ class AdminCategoryViewSet(CustomViewSet):
                 qs.category_parent.save()
 
         serializer = self.serializer_class(qs)
+
+        # Save Logger for Tracking 
+        request_method = request.method
+        request_url = request.build_absolute_uri()
+        request_data = request.data 
+        response_data = serializer.data
+        
+        try:
+            send_action(qs, request_method, request_url,
+                        request_data, response_data)
+        except:
+            pass
+
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
