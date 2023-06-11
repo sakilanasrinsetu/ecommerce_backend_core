@@ -4,6 +4,7 @@ from rest_framework import serializers
 from base.serializers import CreatedBySerializer,UpdatedBySerializer
 from base.serializers import BaseModelSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.serializers import ModelSerializer
 
 User = get_user_model()
 
@@ -48,4 +49,32 @@ class ProductBrandSerializer(BaseModelSerializer):
     class Meta:
         model = ProductBrand
         fields = "__all__"
-    
+
+
+class ProductCategoryVeryLiteSerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'id',
+            'name',
+            'slug',
+            'logo',
+            'translation'
+            ]
+
+
+class ProductGroupWithCategoriesSerializer(ModelSerializer):
+    categories = ProductCategoryVeryLiteSerializer(many=True, 
+                                                    read_only=True)
+
+    class Meta:
+        model = ProductGroup
+        fields = [
+            "id",
+            "name",
+            "slug",
+            "ordering",
+            "categories",
+            "translation",
+        ]
+
