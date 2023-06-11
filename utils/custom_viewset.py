@@ -74,6 +74,7 @@ class CustomViewSet(viewsets.ModelViewSet):
     # ..........***.......... Update ..........***..........
 
     def update(self, request, **kwargs):
+        slug = None
         if request.data.get("slug"):
             slug = request.data.pop("slug")
 
@@ -85,13 +86,23 @@ class CustomViewSet(viewsets.ModelViewSet):
             qs = object_get(object_qs, **kwargs)
 
             if not qs:
-                return ResponseWrapper(error_code=406, error_msg='Not Found', status=406)
+                return ResponseWrapper(error_code=406, error_msg='Not Found', 
+                status=406)
+            
+            # ....NOTE...: Unique Slug Check :....START....
 
             if slug and kwargs.get("slug"):
                 slug_check_qs = self.queryset.filter(slug = slug).exclude(slug = kwargs.get("slug"))
                 if slug_check_qs:
-                    return ResponseWrapper(error_code=406, error_msg='SLug is Already Exist', status=406)
+                    return ResponseWrapper(error_code=406, error_msg='Slug is Already Exist', status=406)
+                
+            else:
+                pk_check_qs = self.queryset.filter(slug = slug).exclude(pk = kwargs.get("pk"))
+                if pk_check_qs:
+                    return ResponseWrapper(error_code=406, error_msg='Slug is Already Exist', status=406)
             
+            # ....NOTE...: Unique Slug Check :....END....
+
             qs = serializer.update(instance=qs, validated_data=serializer.validated_data)
 
             if slug:

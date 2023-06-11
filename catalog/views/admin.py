@@ -38,6 +38,7 @@ class AdminProductGroupViewSet(CustomViewSet):
         return super(AdminProductGroupViewSet, self).create(request, *args,
                                                      **kwargs)
     
+    
 class AdminCategoryViewSet(CustomViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
