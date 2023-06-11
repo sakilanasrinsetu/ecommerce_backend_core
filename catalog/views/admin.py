@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated
 from utils.response_wrapper import ResponseWrapper
-from catalog.filters import ProductGroupFilter, CategoryFilter
+from catalog.filters import ProductGroupFilter, CategoryFilter, TaxCategoryFilter
 from utils.actions import send_action
 from django.db.models import Q
 
@@ -290,6 +290,8 @@ class AdminTaxCategoryViewSet(CustomViewSet):
     queryset = TaxCategory.objects.all()
     serializer_class = TaxCategorySerializer
     lookup_field = "slug"
+    search_fields = ['name']
+    filterset_class = TaxCategoryFilter
 
     def get_permissions(self):
         permission_classes = []
@@ -324,6 +326,8 @@ class AdminProductBrandViewSet(CustomViewSet):
     queryset = ProductBrand.objects.all()
     serializer_class = ProductBrandSerializer
     lookup_field = "pk"
+    search_fields = ['name']
+    ordering_fields = ['is_active', 'slug']
 
     def get_permissions(self):
         permission_classes = []

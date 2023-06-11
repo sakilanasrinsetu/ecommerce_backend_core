@@ -3,7 +3,7 @@ from django_filters.rest_framework import FilterSet
 
 from django.db.models import Count, Min, Q, query_utils
 
-from catalog.models import ProductGroup, Category
+from catalog.models import ProductGroup, Category, TaxCategory, ProductBrand
 
 
 class ProductGroupFilter(FilterSet):
@@ -87,6 +87,33 @@ class CategoryFilter(FilterSet):
         is_featured = self.data.get('is_featured')
         is_active = self.data.get('is_active')
         show_in_ecommerce = self.data.get('show_in_ecommerce')
+        
+        #TODO:
+        # if group__slug
+
+        return queryset
+    
+
+class TaxCategoryFilter(FilterSet):
+    value_in_percentage = django_filters.CharFilter(label="value_in_percentage",
+                                         method="filter_tax_category")
+    # is_active = django_filters.BooleanFilter(label="is_active",
+    #                                    method="filter_tax_category")
+    # type = django_filters.CharFilter(label="type",
+    #                                     method="filter_tax_category")
+
+    class Meta:
+        model = TaxCategory
+        fields = (
+            "value_in_percentage",
+            "is_active",
+            "type",
+        )
+    
+    def filter_tax_category(self, queryset, name, value):
+        value_in_percentage = self.data.get('value_in_percentage')
+        is_active = self.data.get('is_active')
+        type = self.data.get('type')
         
         #TODO:
         # if group__slug
