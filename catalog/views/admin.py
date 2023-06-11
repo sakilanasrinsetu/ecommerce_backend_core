@@ -6,7 +6,6 @@ from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated
 from utils.response_wrapper import ResponseWrapper
 from catalog.filters import ProductGroupFilter, CategoryFilter
-from utils.custom_viewset import object_get
 
 
 class AdminProductGroupViewSet(CustomViewSet):
@@ -36,7 +35,7 @@ class AdminProductGroupViewSet(CustomViewSet):
                                                      **kwargs)
     
 class AdminCategoryViewSet(CustomViewSet):
-    queryset = Category.objects.all().exclude(status = 'child')
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = "pk"
 
@@ -50,6 +49,11 @@ class AdminCategoryViewSet(CustomViewSet):
         else:
             permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+    def list(self, request, *args, **kwargs):
+        qs = self.queryset.exclude(status = 'child')
+        serializer = self.serializer_class(qs, many= True)
+        return ResponseWrapper(status=200, msg="Success", data=serializer.data)
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()

@@ -41,7 +41,6 @@ class CategorySerializer(serializers.ModelSerializer):
         return super(CategorySerializer, self).to_representation(instance)
 
     def get_child(self, obj):
-        a = 'gfb'
         if obj.status == "parent":
             qs = Category.objects.filter(category_parent = obj)
             serializer = CategorySerializer(qs, many = True)
