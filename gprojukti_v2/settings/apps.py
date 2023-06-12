@@ -43,7 +43,7 @@ LOCAL_APPS = [
     # 'promo',
     # 'orders',
     # 'payment',
-    # 'configuration',
+    'configuration',
     # 'repair',
     # 'pc_builder',
     # 'locations',
