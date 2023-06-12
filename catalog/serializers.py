@@ -52,6 +52,8 @@ class ProductBrandSerializer(BaseModelSerializer):
 
 
 class ProductCategoryVeryLiteSerializer(ModelSerializer):
+    child = serializers.SerializerMethodField(read_only = True)
+
     class Meta:
         model = Category
         fields = [
@@ -59,8 +61,16 @@ class ProductCategoryVeryLiteSerializer(ModelSerializer):
             'name',
             'slug',
             'logo',
-            'translation'
+            'translation',
+            'child',
             ]
+        
+    def get_child(self, obj):
+        if obj.status == "parent":
+            qs = Category.objects.filter(category_parent = obj)
+            serializer = CategorySerializer(qs, many = True)
+            return serializer.data
+        return None
 
 
 class ProductGroupWithCategoriesSerializer(ModelSerializer):

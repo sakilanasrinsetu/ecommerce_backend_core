@@ -83,48 +83,60 @@ class Category(BaseModel):
     def __str__(self):
         return self.name
 
+    # ....***.... For Status Automatically Setup  ....***....
 
-    def _clean_standalone(self):
-        """
-        Validates a stand-alone category
-        """
-        if not self.title:
-            raise ValidationError(_("Your Category must have a title."))
-        if self.category_parent_id:
-            raise ValidationError(_("Only child category can have a category parent."))
+    def generate_category_status(self):
+        status = 'standalone'
+        category_parent = None
 
-    def _clean_child(self):
-        """
-        Validates a child category
-        """
-        if not self.category_parent_id:
-            raise ValidationError(_("A child category needs a parent."))
-        if self.category_parent_id and not self.parent.is_parent:
-            raise ValidationError(
-                _("You can only assign child categories to parent categories."))
+        category_parent_status = None
 
-    def _clean_parent(self):
-        """
-        Validates a parent category.
-        """
-        self._clean_standalone()
+        if self.category_parent:
+            category_parent_status = self.category_parent.status
+
+        category_parent_parent_id = None
+        
+        if self.status == 'standalone' and self.category_parent:
+            category_parent = None
+            
+
+        elif self.status == 'parent' and self.category_parent:
+            category_parent = None
+            category_parent = None
+
+        elif self.status == 'child' and not self.category_parent:
+            status = 'standalone'
+        
+        
+        elif self.status == 'child' and self.category_parent:
+            category_parent_status = 'parent'
+            category_parent_parent_id = None
+            status = 'child'
+            category_parent = self.category_parent
+
+
+        return {
+            "status": status,
+            'category_parent': category_parent,
+            'category_parent_status': category_parent_status,
+            'category_parent_parent_id': category_parent_parent_id,
+        }
+
+    def save(self, *args, **kwargs):
+        if not self == self.category_parent:
+            obj = self.generate_category_status()
+            self.status = obj.get('status')
+            self.category_parent = obj.get('category_parent')
+
+            if obj.get('category_parent'):
+                self.category_parent.status = obj.get('category_parent_status')
+                self.category_parent.category_parent = obj.get('category_parent_parent_id')
+
+            super().save(*args, **kwargs)
         pass
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #     self.attr.save()
+    # ....***.... For Status Automatically Setup  ....***....
 
-    @property
-    def is_standalone(self):
-        return self.structure == self.STANDALONE
-
-    @property
-    def is_parent(self):
-        return self.structure == self.PARENT
-
-    @property
-    def is_child(self):
-        return self.structure == self.CHILD
 
 class ProductBrand(BaseModel):
     name = models.CharField(max_length=255)

@@ -6,6 +6,7 @@ from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated
 from utils.response_wrapper import ResponseWrapper
 from django.db.models import  Prefetch, F, Sum
+from catalog.serializers import CategorySerializer
 
 
 class PublicProductGroupViewSet(CustomViewSet):
@@ -13,4 +14,12 @@ class PublicProductGroupViewSet(CustomViewSet):
         Prefetch('categories', queryset=Category.objects.filter(show_in_ecommerce=True, is_active=True))
     )
     serializer_class = ProductGroupWithCategoriesSerializer
+    lookup_field = "pk"
+
+
+class PublicCategoryViewSet(CustomViewSet):
+    queryset = Category.objects.filter(show_in_ecommerce=True, is_active=True, status= "child").order_by('ordering').prefetch_related(
+        Prefetch('categories', queryset=Category.objects.filter(show_in_ecommerce=True, is_active=True))
+    )
+    serializer_class = CategorySerializer
     lookup_field = "pk"
