@@ -1,41 +1,34 @@
-from django.utils.decorators import method_decorator
 from blogs.serializers import BlogSerializer
 from blogs.models import Blog
-# from user.permissions import HasRequiredPermissionForMethod
-# from base.helpers.func import create_slug, my_random_string, entries_to_remove
-# from base.helpers.decorators import exception_handler
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny
+from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated
-
-# from user.permissions import IsStaff, IsSuperUser
-
+from utils.response_wrapper import ResponseWrapper
 
 
-class AdminBlogListCreateAPIView(ListCreateAPIView):
-    # permission_classes = (IsAuthenticated, (IsStaff | IsSuperUser))
-    serializer_class = BlogSerializer
+
+class AdminBlogViewSet(CustomViewSet):
     queryset = Blog.objects.all()
-    search_fields = ['$title']
-
-    # @method_decorator(exception_handler)
-    def create(self, request, *args, **kwargs):
-        title = self.request.data['title']
-        # request.data['slug'] = create_slug(title=title, random_str=my_random_string(6))
-        request.data['created_by'] = self.request.user.id
-        return super(AdminBlogListCreateAPIView, self).create(request, *args, **kwargs)
-
-
-
-class AdminBlogRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsAuthenticated, (IsStaff | IsSuperUser))
     serializer_class = BlogSerializer
-    queryset = Blog.objects.all().filter()
-    lookup_field = 'slug'
-    removeable_keys = ('slug',)
-    http_method_names = ['get', 'patch','delete']
+    lookup_field = "pk" or "slug"
 
-    # def update(self, request, *args, **kwargs):
-    #     updated_request_data = entries_to_remove(self.request.data, self.removeable_keys)
-    #     self.request.data.update(updated_request_data)
-    #     request.data['updated_by'] = self.request.user.id
-    #     return super(AdminBlogRetrieveUpdateDestroyAPIView, self).update(request, *args, **kwargs)
+    search_fields = ['title']
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action in ["create", "update", "delete", "list", "retrieve"]:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    def create(self, request, *args, **kwargs):
+        qs = Blog.objects.filter(title = request.data.get("title")).last()
+        if qs:
+            return ResponseWrapper(
+                error_msg="Blog is Already Found", 
+                error_code=406, status=406
+            )
+        return super(AdminBlogViewSet, self).create(request, *args,
+                                                     **kwargs)

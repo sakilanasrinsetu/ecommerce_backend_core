@@ -68,6 +68,7 @@ urlpatterns = [
         path('api/', include([
         path('v2.0/', include(v2_patterns))
                   ])),
+        path('api-auth/', include('rest_framework.urls')),
 
               ] + schema_urlpatterns
 
