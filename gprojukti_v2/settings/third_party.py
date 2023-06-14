@@ -175,8 +175,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # DRF Spectacular for api organised view
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "GProjukti API'S",
-    "DESCRIPTION": "GProjukti Online Shopping Destination ",
+    "TITLE": "gProjukti API'S",
+    "DESCRIPTION": "G-Projukti Online Shopping Destination ",
     "VERSION": "2.0.1",
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_SETTINGS": {
