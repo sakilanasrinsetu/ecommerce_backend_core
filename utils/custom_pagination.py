@@ -46,11 +46,13 @@ class CustomPagination(PageNumberPagination):
                 "error": {"code": 404, "error_details": 'Invalid page.'},
                 "pagination": {
                     "count": None,
+                    "page_size": None,
                     "next": None,
                     "previous": None
                 },
                 "data": None,
                 "status": False,
+                "status_code": 404,
                 "msg": 'Failed',
             }
 

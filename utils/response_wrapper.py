@@ -59,6 +59,7 @@ class ResponseWrapper(Response):
             "pagination": pagination,
             "data": data,
             "status": response_success,
+            "status_code": status,
             "msg": msg if msg else str(error_msg) if error_msg else "Success" if response_success else "Failed",
         }
 
@@ -89,6 +90,7 @@ class CustomRenderer(JSONRenderer):
             # response parse
             pagination = {
                 "count": None,
+                "page_size": None,
                 "next": None,
                 "previous": None
             }
@@ -98,6 +100,7 @@ class CustomRenderer(JSONRenderer):
                 "pagination": pagination,
                 "data": None,
                 "status": False,
+                "status_code": response.status_code,
                 "msg": msg if msg else str(error_msg) if error_msg else "Success" if response_success else "Failed",
             }
             return super().render(output_data, accepted_media_type, renderer_context)
