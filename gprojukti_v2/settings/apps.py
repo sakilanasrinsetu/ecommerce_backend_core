@@ -9,7 +9,7 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.gis',
+    'django.contrib.gis',
 ]
 
 ON_TOP_APPS = [
@@ -35,7 +35,7 @@ LOCAL_APPS = [
     'blogs',
     'catalog',
     'products',
-    # 'store',
+    'store',
     # 'supplier',
     # 'campaigns',
     # 'purchase',
@@ -47,7 +47,7 @@ LOCAL_APPS = [
     # 'repair',
     # 'pc_builder',
     # 'locations',
-    # 'point_of_sale',
+    'point_of_sale',
 
 ]
 

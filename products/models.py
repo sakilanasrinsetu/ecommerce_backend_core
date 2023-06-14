@@ -1,14 +1,34 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from base.models import BaseModel, WarrantyDurationOptions
-# from point_of_sale.models import POSProductInfo
+from point_of_sale.models import POSProductInfo
 from configuration.models import Seller
+from base.models import BaseModel,StructureChoices
+from django.utils.translation import gettext_lazy as _
+from catalog.models import Category, ProductBrand, TaxCategory
+from store.models import Store
+from django.contrib.postgres.fields import ArrayField
+
 
 # Create your models here.
 
 class Product(BaseModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, unique=True)
+
+    # ....***.... Note: Status Add for single Model
+    status = models.CharField(max_length=20, 
+                              choices=StructureChoices.choices)
+    parent_product = models.ForeignKey('self',
+                                on_delete=models.CASCADE,
+                                null=True, blank=True,
+                                related_name='products',
+                                help_text=_("Only choose a parent Product if you're creating a child "
+                                "Product.  For example if this is PC "
+                                "3 of a particular [Normal, Gaming].  Leave blank if this is a "
+                                "stand-alone Category (i.e. there is only one version of"
+                                " this Product).")
+                    )
 
     """  For SEO Friendly """
     metaTitle = models.CharField(max_length=200, null=True, blank=True)
@@ -21,23 +41,25 @@ class Product(BaseModel):
  
     description = models.TextField()
     selling_tax_category = models.ForeignKey(
-        to='catalog.TaxCategory', 
+        to=TaxCategory, 
         on_delete=models.CASCADE, related_name='selling_products')
     buying_tax_category = models.ForeignKey(
-        to='catalog.TaxCategory', 
+        to=TaxCategory, 
         on_delete=models.CASCADE, related_name='buying_products')
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
 
     # ....***.... After Marge ....***....
 
-    brand = models.ForeignKey(to='catalog.ProductBrand', 
+    brand = models.ForeignKey(ProductBrand, 
                               on_delete=models.CASCADE,
                               related_name='products')
     images = models.JSONField(default=list)
     sku = models.CharField(max_length=100, null=False, unique=True)
-    categories = models.ManyToManyField('catalog.Category', related_name='category_products')
-    sub_categories = models.ManyToManyField('catalog.Category',related_name='sub_category_products')
+    categories = models.ManyToManyField(Category, 
+                                        related_name='category_products')
+    sub_categories = models.ManyToManyField(Category,
+                                            related_name='sub_category_products')
     translation = models.JSONField(default=dict)
     images = models.JSONField(default=list)
     selling_price = models.FloatField()
@@ -76,10 +98,11 @@ class Product(BaseModel):
     ogDescription = models.TextField(null=True, blank=True)
     ogUrl = models.CharField(max_length=200,null=True, blank=True)
     is_only_pos = models.BooleanField(default=False)
-    # pos_product_info = models.ForeignKey(POSProductInfo, 
-    #                                     on_delete=models.CASCADE,
-    #                                       null=True, blank=True,
-    #                                       related_name='products')
+    pos_product_info = models.ForeignKey(POSProductInfo, 
+                                        on_delete=models.CASCADE,
+                                        null=True, blank=True,
+                                        related_name='products')
+
   
     class Meta:
         ordering = ['ordering']
@@ -95,7 +118,7 @@ class Product(BaseModel):
         ]
 
 class ProductSeller(models.Model):
-    product_variant = models.ForeignKey(
+    product = models.ForeignKey(
         Product, on_delete=models.CASCADE,
         related_name='product_sellers')
     seller = models.ForeignKey(
@@ -107,3 +130,90 @@ class ProductSeller(models.Model):
         if self.product_variant:
             return self.product_variant.name
         return str(self.pk)
+
+class ProductReview(BaseModel):
+    product = models.ForeignKey(Product,
+                                 on_delete=models.CASCADE,
+                                 related_name='product_reviews',
+                                 null=True, blank=True)
+    
+    #TODO: When Order Model Add Then Add This Key
+
+    # order = models.ForeignKey(to='orders.Order',
+    #                             on_delete=models.CASCADE, 
+    #                             related_name='product_reviews',
+    #                             null=True, blank=True)
+    
+    review = models.TextField()
+    rating = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)])
+    is_accepted = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+        db_table = 'product_reviews'
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['rating']),
+        ]
+
+    def __str__(self):
+        return str(self.rating)
+    
+# class ProductAttribute(BaseModel):
+#     product = models.ForeignKey(Product,
+#                                 on_delete=models.CASCADE,
+#                                 related_name='product_attributes',
+#                                 null=True, blank=True)
+#     attribute = models.ForeignKey(Attribute,
+#                                    on_delete=models.CASCADE,
+#                                    related_name='product_attributes',
+#                                    null=True, blank=True)
+#     attribute_value = models.ForeignKey(AttributeValue,
+#                                          on_delete=models.CASCADE,
+#                                          related_name='product_attributes',
+#                                          null=True, blank=True)
+
+#     class Meta:
+#         ordering = ['-created_at']
+#         db_table = 'product_variant_attributes'
+#         indexes = [
+#             models.Index(fields=['-created_at']),
+#         ]
+
+#     def __str__(self):
+#         return str(self.product)
+
+# ***NOTE***: Product Serial Remove Because of Does not Used
+    
+
+class PreOrderProductForm(models.Model):
+    name = models.CharField(max_length=200)
+    phone = models.CharField(max_length=200)
+    email = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(max_length=400, null=True, blank=True)
+    product = models.ForeignKey(Product, 
+                                on_delete=models.CASCADE,
+                                related_name='pro_order_product_forms',
+                                null=True, blank=True)
+    quantity = models.IntegerField(default=1,null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.name
+    
+
+ # TODO: Here In Store Key FK Relation Setup
+
+class TransferProduct(models.Model):
+    from_store = models.ForeignKey(Store, on_delete=models.CASCADE,
+                                   related_name='from_transfer_products',
+                                   null=True, blank=True)
+    to_store = models.ForeignKey(Store, on_delete=models.CASCADE,
+                                   related_name='to_transfer_products',
+                                   null=True, blank=True)
+    sku_list = ArrayField(models.CharField(max_length=200), null=True)
+    approval_status = models.CharField(max_length=200, null=True,default=False)
+    date = models.DateTimeField(auto_now_add=True)
+

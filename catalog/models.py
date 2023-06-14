@@ -68,6 +68,7 @@ class Category(BaseModel):
     metaDescription = models.TextField(null=True, blank=True)
     canonical = models.URLField(null=True, blank=True)
     banner_image = models.TextField(null=True, blank=True)
+    is_child = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['ordering']
@@ -131,6 +132,11 @@ class Category(BaseModel):
             if obj.get('category_parent'):
                 self.category_parent.status = obj.get('category_parent_status')
                 self.category_parent.category_parent = obj.get('category_parent_parent_id')
+
+            if obj.get('status') == 'child' and obj.get('category_parent'):
+                self.is_child = True
+            else:
+                self.is_child = False
 
             super().save(*args, **kwargs)
         pass
