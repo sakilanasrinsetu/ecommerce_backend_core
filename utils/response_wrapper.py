@@ -53,6 +53,8 @@ class ResponseWrapper(Response):
                         data = data.pop("results")
                 except:
                     pass
+        if not response_success:
+            status = error_code
 
         output_data = {
             "error": {"code": error_code, "error_details": error_msg},
