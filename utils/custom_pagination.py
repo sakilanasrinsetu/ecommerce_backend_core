@@ -18,6 +18,7 @@ class CustomPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response(OrderedDict([
             ('count', self.page.paginator.count),
+            ('page_size', data.__len__()),
             ('next', self.get_next_link()),
             ('previous', self.get_previous_link()),
             ('results', data)
@@ -69,7 +70,7 @@ class CustomPagination(PageNumberPagination):
 
 
 class CustomLimitPagination(LimitOffsetPagination):
-    default_limit = 10
+    default_limit = 20
     limit_query_param = 'limit'
     offset_query_param = 'offset'
     max_limit = 100
