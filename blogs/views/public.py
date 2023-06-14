@@ -13,12 +13,3 @@ class PublicBlogViewSet(CustomViewSet):
     lookup_field = "pk" or "slug"
 
     search_fields = ['title']
-
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete"]:
-            permission_classes = [IsAdminUser]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
-
