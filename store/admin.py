@@ -3,13 +3,6 @@ from .models import *
 
 # Register your models here.
 
-class DistrictAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-
-    class Meta:
-        model = District
-
-admin.site.register(District, DistrictAdmin)
 
 class StoreAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'district']

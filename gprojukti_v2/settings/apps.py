@@ -46,7 +46,7 @@ LOCAL_APPS = [
     'configuration',
     # 'repair',
     # 'pc_builder',
-    # 'locations',
+    'locations',
     'point_of_sale',
 
 ]

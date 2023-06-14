@@ -5,23 +5,10 @@ from django.contrib.postgres.fields import ArrayField
 
 from base.models import BaseModel, PaymentMethodOptions, StoreTypeOptions
 from point_of_sale.models import POSUserAreas, POSUserRegions
+from locations.models import District
 
 
 # Create your models here.
-
-class District(models.Model):
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'districts'
-        ordering = ['name']
-        indexes = [
-            models.Index(fields=['name']),
-        ]
-
-    def __str__(self):
-        return self.name
-
 
 class Store(BaseModel):
     name = models.CharField(max_length=150)
