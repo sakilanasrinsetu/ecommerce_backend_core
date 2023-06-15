@@ -1,4 +1,4 @@
-from store.serializers import DistrictSerializer
+from store.serializers import StoreSerializer
 from store.models import District, Store
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import  AllowAny
@@ -6,36 +6,15 @@ from rest_framework.permissions import  AllowAny
 from rest_framework.views import APIView
 from utils.response_wrapper import ResponseWrapper
 from utils.custom_viewset import CustomViewSet
+from store.filters import StoreFilter
 
 
 
-class PublicDistrictViewset(CustomViewSet):
+class PublicStoreViewset(CustomViewSet):
     permission_classes =  (AllowAny,)
-    serializer_class = DistrictSerializer
-    queryset = District.objects.all()
-    search_fields = ['name']
+    serializer_class = StoreSerializer
+    queryset = Store.objects.all()
     lookup_field = "pk"
 
+    filterset_class = StoreFilter
 
-# class PublicStoreListAPIView(ListAPIView):
-#     permission_classes =  (AllowAny,)
-#     serializer_class = PublicStoreLiteSerializer
-#     queryset = Store.objects.select_related('district', 'created_by', 'updated_by').filter()
-#     search_fields = ['district__name', 'name']
-#     filterset_class = StoreFilter
-
-# class PublicStoreRetrieveAPIView(RetrieveAPIView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = PublicStoreSerializer
-#     queryset = Store.objects.select_related('district', 'created_by', 'updated_by').filter()
-#     lookup_field = 'slug'
-
-
-
-# class getAllStoreList(APIView):
-#     permission_classes = (AllowAny,)
-
-#     def get(self, request, format=None):
-#         query_set =Store.objects.all()
-#         serializer = StoreLiteSerializer(query_set, many=True)
-#         return Response(serializer.data)

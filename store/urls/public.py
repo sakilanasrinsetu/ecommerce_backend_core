@@ -1,11 +1,9 @@
 from django.urls import path
-from store.views.public import PublicDistrictViewset
+from store.views.public import PublicStoreViewset
 app_name = 'public'
 
 urlpatterns = [
-   #   path('district/', PublicDistrictViewset.as_view(
-   #      {"get": "list"}),name="district"),
-   #   path('district/<pk>/', PublicDistrictViewset.as_view(
-   #      {"get": "retrieve"}),name="district"),
+     path('store/', PublicStoreViewset.as_view(
+        {"get": "list"}),name="store"),
 
 ]

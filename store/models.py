@@ -29,7 +29,7 @@ class Store(BaseModel):
     shown_in_website = models.BooleanField(default=True)
     off_days = ArrayField(models.CharField(max_length=15), default=list)
     is_active = models.BooleanField(default=True)
-    area = models.ForeignKey(POSUserAreas, 
+    pos_area = models.ForeignKey(POSUserAreas, 
                             on_delete=models.CASCADE,
                             null=True, blank=True,
                             related_name='stores')

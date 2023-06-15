@@ -2,10 +2,20 @@ from rest_framework import serializers
 from base.serializers import BaseModelSerializer
 from store.models import District, Store, StorePaymentMethod
 # from user.serializers import UserSerializer
+from locations.serializers import DistrictSerializer
+from point_of_sale.serializers import POSUserAreasSerializer, POSUserRegionsSerializer
 
 
-class DistrictSerializer(serializers.ModelSerializer):
+class StoreSerializer(BaseModelSerializer):
 
     class Meta:
-        model = District
+        model = Store
         fields = '__all__'
+
+
+    def to_representation(self, instance):
+        self.fields["district"] = DistrictSerializer(read_only=True)
+        self.fields["pos_area"] = POSUserAreasSerializer(read_only=True)
+        self.fields["region"] = POSUserRegionsSerializer(read_only=True)
+
+        return super(StoreSerializer, self).to_representation(instance)
