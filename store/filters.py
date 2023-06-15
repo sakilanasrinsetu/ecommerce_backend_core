@@ -2,7 +2,7 @@ import django_filters
 from django_filters.rest_framework import FilterSet
 
 from django.db.models import Count, Min, Q, query_utils
-from store.models import Store
+from store.models import Store, StorePaymentMethod
 
 class StoreFilter(FilterSet):
     created_at_after = django_filters.DateFilter(label="created_at_after",
@@ -107,6 +107,54 @@ class StoreFilter(FilterSet):
             return queryset
 
 
+
+        return queryset
+        
+
+class StorePaymentMethodFilter(FilterSet):
+    store_slug = django_filters.CharFilter(label="store_slug",
+                                           method="filter_store_payment_method")
+    type = django_filters.CharFilter(label="type",
+                                           method="filter_store_payment_method")
+    search = django_filters.CharFilter(label="search",
+                                           method="filter_store_payment_method")
+
+    class Meta:
+        model = StorePaymentMethod
+        fields = (
+            "store_slug",
+            "type",
+            "search",
+        )
+
+    def filter_store_payment_method(self, objects, name, value):
+        store_slug = self.data.get('store_slug')
+        type = self.data.get('type')
+        search = self.data.get('search')
+
+        queryset = objects.all()
+
+        if store_slug:
+            queryset = queryset.filter(
+                store__slug = store_slug
+            )
+
+            return queryset
+
+        elif type:
+            queryset = queryset.filter(
+                type = type
+            )
+
+            return queryset
+        
+        elif search:
+            queryset = queryset.filter(
+                Q(name__icontains = search)
+                | Q(account_number = search)
+            )
+
+            return queryset
 
         return queryset
         

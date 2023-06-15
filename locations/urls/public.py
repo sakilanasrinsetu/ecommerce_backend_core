@@ -19,6 +19,6 @@ urlpatterns = [
         {"get": "retrieve"}),name="area"),
     path('area_list/', AreaViewSet.as_view(
         {"get": "list"}),name="area_list"),
-    path('store_list/', StoreLocationViewSet.as_view(
-        {"get": "list"}),name="store_list"),
+    path('store_location_list/', StoreLocationViewSet.as_view(
+        {"get": "list"}),name="store_location_list"),
 ]

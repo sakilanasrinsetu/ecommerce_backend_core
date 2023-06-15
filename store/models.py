@@ -6,6 +6,9 @@ from django.contrib.postgres.fields import ArrayField
 from base.models import BaseModel, PaymentMethodOptions, StoreTypeOptions
 from point_of_sale.models import POSUserAreas, POSUserRegions
 from locations.models import District
+from utils.generates import unique_slug_generator
+from django.utils.text import slugify
+from django.db.models.signals import post_save, pre_save
 
 
 # Create your models here.
@@ -77,3 +80,15 @@ class StorePaymentMethod(BaseModel):
     
     def __str__(self):
         return self.name
+
+# ............***............ Store ............***............
+
+
+def store_slug_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        title = slugify(instance.name.lower()[:17])
+        slug_binding = title + '-' + unique_slug_generator()
+        instance.slug = slug_binding
+
+
+pre_save.connect(store_slug_pre_save_receiver, sender=Store)
