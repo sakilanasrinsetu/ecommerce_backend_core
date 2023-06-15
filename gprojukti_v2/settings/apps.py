@@ -48,6 +48,7 @@ LOCAL_APPS = [
     # 'pc_builder',
     'locations',
     'point_of_sale',
+    'discount',
 
 ]
 

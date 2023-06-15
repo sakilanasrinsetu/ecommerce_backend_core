@@ -62,6 +62,10 @@ class DiscountTypeChoices(models.TextChoices):
     FLAT = 'flat', _('flat')
     PERCENTAGE = 'percentage', _('percentage')
 
+class DiscountScheduleTypeChoices(models.TextChoices):
+    DATE_WISE = 'date_wise', _('date_wise')
+    TIME_WISE = 'time_wise', _('time_wise')
+
 
 class BalanceTypes(models.TextChoices):
     PAID = 'paid', 'paid'
