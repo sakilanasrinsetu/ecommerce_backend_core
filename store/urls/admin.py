@@ -16,7 +16,7 @@ urlpatterns = [
      path('store_payment_method/', AdminStorePaymentMethodViewset.as_view(
         {"get": "list", 'post':'create'}),
                       name="store_payment_method"),
-     path('store_payment_method/<slug>/', AdminStorePaymentMethodViewset.as_view(
+     path('store_payment_method/<pk>/', AdminStorePaymentMethodViewset.as_view(
         {"patch": "update", 'delete':'destroy', 'get':'retrieve'}),
                       name="store_payment_method"),
 ]

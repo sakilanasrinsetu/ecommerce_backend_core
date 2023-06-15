@@ -26,7 +26,7 @@ from drf_spectacular.views import (
 )
 from rest_framework import routers
 
-from gprojukti_v2.views import health_check
+from gprojukti_v2.views import (HealthCheckViewset)
 
 router = routers.DefaultRouter()
 
@@ -64,7 +64,9 @@ v2_patterns = [
 
 urlpatterns = [
         path('admin/', admin.site.urls),
-        path('health_check/', health_check),
+        # path('health_check/', health_check),
+        path('health_check/', HealthCheckViewset.as_view({"get": "health_check"}),
+                      name="health_check"),
         path('api/', include([
         path('v2.0/', include(v2_patterns))
                   ])),
