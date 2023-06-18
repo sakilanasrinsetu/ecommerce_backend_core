@@ -41,7 +41,8 @@ class Category(BaseModel):
     translation = models.JSONField(default=dict)
     product_group = models.ForeignKey(ProductGroup,
                                       on_delete=models.CASCADE, 
-                                      related_name='categories')
+                                      related_name='categories',
+                                      null=True, blank=True)
     translation = models.JSONField(default=dict)
     category_parent = models.ForeignKey('self',
                                 on_delete=models.CASCADE,
@@ -141,6 +142,7 @@ class Category(BaseModel):
 
             if obj.get('status') == 'child' and obj.get('category_parent'):
                 self.is_child = True
+                self.product_group = None
             else:
                 self.is_child = False
 

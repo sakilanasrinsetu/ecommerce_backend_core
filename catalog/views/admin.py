@@ -252,9 +252,9 @@ class AdminCategoryViewSet(CustomViewSet):
             qs = qs
             
         if qs.status == "child":
-            a ='df'
             if qs.category_parent.status == 'standalone' or qs.category_parent.status == 'child':
                 qs.category_parent.status = "parent"
+                qs.product_group = None
                 qs.category_parent.save()
 
         serializer = self.serializer_class(qs)
