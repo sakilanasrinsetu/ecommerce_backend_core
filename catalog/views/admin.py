@@ -1,5 +1,6 @@
 from catalog.serializers import (ProductGroupSerializer, CategorySerializer,
-                                 TaxCategorySerializer, ProductBrandSerializer)
+                                 TaxCategorySerializer, ProductBrandSerializer,
+                                 DiscountAddSerializer)
 from catalog.models import ProductGroup, Category, TaxCategory, ProductBrand
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
@@ -9,6 +10,7 @@ from utils.response_wrapper import ResponseWrapper
 from catalog.filters import ProductGroupFilter, CategoryFilter, TaxCategoryFilter
 from utils.actions import send_action
 from django.db.models import Q
+from discount.models import Discount
 
 
 
@@ -41,6 +43,14 @@ class AdminCategoryViewSet(CustomViewSet):
 
     search_fields = ['name']
     filterset_class = CategoryFilter
+
+    def get_serializer_class(self):
+        if self.action == 'discount_add_in_category':
+            self.serializer_class = DiscountAddSerializer
+        else:
+            self.serializer_class = self.serializer_class
+
+        return self.serializer_class
 
 
     def list(self, request, *args, **kwargs):
@@ -273,6 +283,28 @@ class AdminCategoryViewSet(CustomViewSet):
 
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
 
+    def discount_add_in_category(self, request, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return ResponseWrapper(
+                error_msg=serializer.errors,
+                error_code=400, status=400)
+        
+
+        discount_id = serializer.validated_data.get('discount')
+        product_id = serializer.validated_data.get('product')
+        category_id = serializer.validated_data.get('category')
+
+        discount_qs = Discount.objects.filter(pk = discount_id.id).last()
+
+        if not discount_qs:
+            return ResponseWrapper( 
+                error_msg='Discount Not Found',
+                error_code=400, status=400)
+
+        return ResponseWrapper(status=200, msg="Success")
+        
 
 class AdminTaxCategoryViewSet(CustomViewSet):
     queryset = TaxCategory.objects.all()

@@ -5,6 +5,8 @@ from base.serializers import CreatedBySerializer,UpdatedBySerializer
 from base.serializers import BaseModelSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
+from discount.models import Discount
+from products.models import Product
 
 User = get_user_model()
 
@@ -88,3 +90,15 @@ class ProductGroupWithCategoriesSerializer(ModelSerializer):
             "translation",
         ]
 
+class DiscountAddSerializer(serializers.Serializer):
+    discount = serializers.PrimaryKeyRelatedField(
+        read_only=False, queryset=Discount.objects.all()
+    )
+    product = serializers.PrimaryKeyRelatedField(
+        read_only=False, queryset=Product.objects.all(),
+        required = False, many= True
+    )
+    category = serializers.PrimaryKeyRelatedField(
+        read_only=False, queryset=Category.objects.all(),
+        required = False, many= True
+    )

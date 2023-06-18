@@ -21,6 +21,9 @@ urlpatterns = [
     path('category/<pk>/', AdminCategoryViewSet.as_view(
         {"patch": "update", 'delete':'destroy', 'get':'retrieve'}),
                       name="category"),
+    path('discount_add_in_category/', AdminCategoryViewSet.as_view(
+        {"post": "discount_add_in_category"}),
+                      name="discount_add_in_category"),
     path('tax_category/', AdminTaxCategoryViewSet.as_view(
         {"get": "list", 'post':'create'}),
                       name="tax_category"),
