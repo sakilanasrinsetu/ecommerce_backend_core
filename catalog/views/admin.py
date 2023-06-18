@@ -19,14 +19,8 @@ class AdminProductGroupViewSet(CustomViewSet):
 
     search_fields = ['name']
     filterset_class = ProductGroupFilter
+    permission_classes = (IsAuthenticated,)
 
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete"]:
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         qs = ProductGroup.objects.filter(name = request.data.get("name")).last()
@@ -43,17 +37,11 @@ class AdminCategoryViewSet(CustomViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = "pk"
+    permission_classes = (IsAuthenticated,)
 
     search_fields = ['name']
     filterset_class = CategoryFilter
 
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete"]:
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
         qs = self.queryset.exclude(status = 'child')
@@ -292,14 +280,7 @@ class AdminTaxCategoryViewSet(CustomViewSet):
     lookup_field = "slug"
     search_fields = ['name']
     filterset_class = TaxCategoryFilter
-
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete"]:
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
+    permission_classes = (IsAuthenticated,)
     
 
     def create(self, request, *args, **kwargs):
@@ -328,14 +309,7 @@ class AdminProductBrandViewSet(CustomViewSet):
     lookup_field = "pk"
     search_fields = ['name']
     ordering_fields = ['is_active', 'slug']
-
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete"]:
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
+    permission_classes = (IsAuthenticated,)
     
 
     def create(self, request, *args, **kwargs):

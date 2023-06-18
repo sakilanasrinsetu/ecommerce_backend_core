@@ -14,14 +14,7 @@ class AdminBlogViewSet(CustomViewSet):
     lookup_field = "pk" or "slug"
 
     search_fields = ['title']
-
-    def get_permissions(self):
-        permission_classes = []
-        if self.action in ["create", "update", "delete", "list", "retrieve"]:
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+    permission_classes = (IsAuthenticated,)
 
     def create(self, request, *args, **kwargs):
         qs = Blog.objects.filter(title = request.data.get("title")).last()
