@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from catalog.models import Category, ProductBrand, TaxCategory
 from store.models import Store
 from django.contrib.postgres.fields import ArrayField
+from discount.models import Discount
 
 
 # Create your models here.
@@ -102,6 +103,10 @@ class Product(BaseModel):
                                         on_delete=models.CASCADE,
                                         null=True, blank=True,
                                         related_name='products')
+    discount = models.ForeignKey(Discount,
+                                on_delete=models.CASCADE,
+                                related_name='products',
+                                null=True, blank=True)
 
   
     class Meta:

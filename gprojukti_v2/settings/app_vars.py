@@ -1,6 +1,10 @@
 import os
 from decouple import config
 from gprojukti_v2.settings.base import BASE_DIR
+from django.utils import timezone
+from datetime import date, datetime, timedelta
+
+
 
 # django vars
 # AUTH_USER_MODEL = 'user.User'
@@ -77,3 +81,10 @@ DIGITAL_OCEAN_SPACES_ACCESS_KEY_ID = config('DIGITAL_OCEAN_SPACES_ACCESS_KEY_ID'
 DIGITAL_OCEAN_SPACES_SECRET_ACCESS_KEY = config('DIGITAL_OCEAN_SPACES_SECRET_ACCESS_KEY')
 DIGITAL_OCEAN_SPACES_ENDPOINT_URL = config('DIGITAL_OCEAN_SPACES_ENDPOINT_URL')
 DIGITAL_OCEAN_SPACES_BUCKET_NAME = config('DIGITAL_OCEAN_SPACES_BUCKET_NAME')
+
+
+# Current Date & Time Check
+TODAY = datetime.strptime(
+        str(timezone.datetime.now().date()) + " 00:00:00", '%Y-%m-%d %H:%M:%S'
+    )
+CURRENT_TIME = timezone.datetime.now().time()

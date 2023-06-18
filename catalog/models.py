@@ -2,6 +2,8 @@ from django.db import models
 from base.models import BaseModel, TaxTypes, CustomQuerySetManager,StructureChoices
 from django.core.exceptions import  ValidationError
 from django.utils.translation import gettext_lazy as _
+from discount.models import Discount
+from gprojukti_v2.settings.app_vars import TODAY, CURRENT_TIME
 
 # Create your models here.
 
@@ -69,6 +71,10 @@ class Category(BaseModel):
     canonical = models.URLField(null=True, blank=True)
     banner_image = models.TextField(null=True, blank=True)
     is_child = models.BooleanField(default=False)
+    discount = models.ForeignKey(Discount,
+                                on_delete=models.CASCADE,
+                                related_name='categories',
+                                null=True, blank=True)
 
     class Meta:
         ordering = ['ordering']

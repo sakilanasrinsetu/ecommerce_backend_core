@@ -26,7 +26,6 @@ class PublicDiscountViewSet(CustomViewSet):
             )
         current_time = timezone.datetime.now().time()
 
-
         qs = qs.filter(Q(start_date__lte=today, end_date__gte=today, discount_schedule_type = 'date_wise')| Q(start_time__lte= current_time, end_time__gte=current_time, discount_schedule_type = 'time_wise'))
 
         serializer_class = self.get_serializer_class()
