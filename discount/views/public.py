@@ -5,11 +5,11 @@ from rest_framework.permissions import AllowAny
 from utils.custom_viewset import CustomViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from utils.response_wrapper import ResponseWrapper
+from discount.models import Discount
+from discount.serializers import DiscountSerializer
 
 
-class PublicBlogViewSet(CustomViewSet):
-    queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
-    lookup_field = "pk" or "slug"
-
-    search_fields = ['title']
+class PublicDiscountViewSet(CustomViewSet):
+    queryset = Discount.objects.filter(is_active = True)
+    serializer_class = DiscountSerializer
+    lookup_field = "pk"

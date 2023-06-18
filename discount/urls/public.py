@@ -1,13 +1,16 @@
 from django.urls import path
-from blogs.views.public import (
-    PublicBlogViewSet
+from discount.views.public import (
+    PublicDiscountViewSet
 )
 
 app_name = 'public'
 
 
 urlpatterns = [
-    path('blogs/', PublicBlogViewSet.as_view(
+    path('discount_list/', PublicDiscountViewSet.as_view(
         {"get": "list"}),
-                      name="blogs")
+                      name="discount_list"),
+    path('discount_details/<pk>/', PublicDiscountViewSet.as_view(
+        {"get": "retrieve"}),
+        name="discount_details"),
 ]

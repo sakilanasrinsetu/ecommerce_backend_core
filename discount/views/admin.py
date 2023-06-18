@@ -120,12 +120,12 @@ class AdminDiscountViewSet(CustomViewSet):
             return ResponseWrapper(
                 error_msg=serializer.errors,
                 error_code=400,
-                status=400)
+                status=400
+                )
         
-        print('ddddddddd', kwargs["pk"])
         
         discount_qs = self.queryset.filter(id = kwargs["pk"]).last()
-        print('ddddddddddd', discount_qs)
+        
         if not discount_qs:
             return ResponseWrapper(
                 error_code=404,
@@ -198,7 +198,7 @@ class AdminDiscountViewSet(CustomViewSet):
             if start_time <= current_time and end_time >= current_time:
                 is_active = True
 
-        qs = serializer.update(instance=qs, validated_data=serializer.validated_data)
+        qs = serializer.update(instance=discount_qs, validated_data=serializer.validated_data)
 
         serializer = self.serializer_class(instance=qs)
 
@@ -211,7 +211,11 @@ class AdminDiscountViewSet(CustomViewSet):
         response_data = serializer.data
 
         try:
-            send_action(qs, request_method, request_url,request_data, response_data)
+            send_action(qs, request_method, 
+                        request_url,
+                        request_data,
+                        response_data
+                        )
         except:
             pass
         
