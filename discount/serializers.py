@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 
-class DiscountSerializer(serializers.ModelField):
+class DiscountSerializer(serializers.ModelSerializer):
     is_active = serializers.BooleanField(read_only=True)
 
     class Meta:

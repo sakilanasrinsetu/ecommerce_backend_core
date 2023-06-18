@@ -1,15 +1,15 @@
 from django.urls import path
-from blogs.views.admin import (
-    AdminBlogViewSet
+from discount.views.admin import (
+    AdminDiscountViewSet
 )
 
 app_name = 'admin'
 
 urlpatterns = [
-    path('blogs/', AdminBlogViewSet.as_view(
+    path('discount/', AdminDiscountViewSet.as_view(
         {"get": "list", 'post':'create'}),
-                      name="blog"),
-    path('blogs/<slug>/', AdminBlogViewSet.as_view(
+                      name="discount"),
+    path('discount/<pk>/', AdminDiscountViewSet.as_view(
         {"patch": "update", 'delete':'destroy', 'get':'retrieve'}),
-                      name="blog"),
+                      name="discount"),
 ]

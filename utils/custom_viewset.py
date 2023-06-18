@@ -51,9 +51,12 @@ class CustomViewSet(viewsets.ModelViewSet):
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data)
         if serializer.is_valid():
-            qs = serializer.save(
-                created_by=self.request.user
-            )
+            try:
+                qs = serializer.save(
+                    created_by=self.request.user
+                )
+            except:
+                qs = serializer.save()
 
             # Save Logger for Tracking 
 
