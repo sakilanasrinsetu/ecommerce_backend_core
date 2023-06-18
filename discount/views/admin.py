@@ -220,3 +220,6 @@ class AdminDiscountViewSet(CustomViewSet):
             pass
         
         return ResponseWrapper(data=serializer.data, msg='Success', status=200)
+
+
+#TODO: Discount Add in Category and Project for BULK Amount
