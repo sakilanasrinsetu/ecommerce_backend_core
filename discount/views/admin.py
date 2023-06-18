@@ -114,20 +114,31 @@ class AdminDiscountViewSet(CustomViewSet):
     
     def update(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(data=request.data)
+        serializer = serializer_class(data=request.data, partial=True)
+
         if not serializer.is_valid():
             return ResponseWrapper(
                 error_msg=serializer.errors,
                 error_code=400,
                 status=400)
         
-        start_date = serializer.validated_data.get('start_date')
-        end_date = serializer.validated_data.get('end_date')
-        start_time = serializer.validated_data.get('start_time')
-        end_time = serializer.validated_data.get('end_time')
-        discount_schedule_type = serializer.validated_data.get('discount_schedule_type')
-        discount_type = serializer.validated_data.get('discount_type')
-        amount = serializer.validated_data.get('amount')
+        print('ddddddddd', kwargs["pk"])
+        
+        discount_qs = self.queryset.filter(id = kwargs["pk"]).last()
+        print('ddddddddddd', discount_qs)
+        if not discount_qs:
+            return ResponseWrapper(
+                error_code=404,
+                error_msg='Discount Not Found',
+                status=404)
+        
+        start_date = serializer.validated_data.get('start_date', discount_qs.start_date)
+        end_date = serializer.validated_data.get('end_date', discount_qs.end_date)
+        start_time = serializer.validated_data.get('start_time', discount_qs.start_time)
+        end_time = serializer.validated_data.get('end_time', discount_qs.end_time)
+        discount_schedule_type = serializer.validated_data.get('discount_schedule_type', discount_qs.discount_schedule_type)
+        discount_type = serializer.validated_data.get('discount_type', discount_qs.discount_type)
+        amount = serializer.validated_data.get('amount', discount_qs.amount)
 
         is_active = False
         
@@ -138,7 +149,7 @@ class AdminDiscountViewSet(CustomViewSet):
 
         if discount_type == 'percentage' and amount > 100:
             return ResponseWrapper(
-                    error_msg='Discount Amount Must Be Less Than 100',
+                    error_msg=f'Discount Amount Must Be Less Than 100, Here Discount Amount is {amount}',
                     error_code=406, status=406
                 )
 
@@ -187,8 +198,10 @@ class AdminDiscountViewSet(CustomViewSet):
             if start_time <= current_time and end_time >= current_time:
                 is_active = True
 
-        qs = serializer.save(is_active = is_active)
-        
+        qs = serializer.update(instance=qs, validated_data=serializer.validated_data)
+
+        serializer = self.serializer_class(instance=qs)
+
 
         # Save Logger for Tracking 
 
