@@ -70,6 +70,8 @@ class CategoryFilter(FilterSet):
                                         method="filter_category")
     show_in_ecommerce = django_filters.CharFilter(label="show_in_ecommerce",
                                        method="filter_category")
+    status = django_filters.CharFilter(label="status",
+                                       method="filter_category")
 
     class Meta:
         model = Category
@@ -79,17 +81,21 @@ class CategoryFilter(FilterSet):
             "is_featured",
             "is_active",
             "show_in_ecommerce",
+            "status",
         )
     
     def filter_category(self, queryset, name, value):
+        print('vvvvvvvvvvvvvvvvvvvvv')
         group__slug = self.data.get('group__slug')
         has_child = self.data.get('has_child')
         is_featured = self.data.get('is_featured')
         is_active = self.data.get('is_active')
         show_in_ecommerce = self.data.get('show_in_ecommerce')
+        status = self.data.get('status')
         
         #TODO:
-        # if group__slug
+        if status:
+            queryset = queryset.filter(status = status)
 
         return queryset
     

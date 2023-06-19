@@ -55,10 +55,10 @@ class AdminCategoryViewSet(CustomViewSet):
         return self.serializer_class
 
 
-    def list(self, request, *args, **kwargs):
-        qs = self.queryset.exclude(status = 'child')
-        serializer = self.serializer_class(qs, many= True)
-        return ResponseWrapper(status=200, msg="Success", data=serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     qs = self.queryset.exclude(status = 'child')
+    #     serializer = self.serializer_class(qs, many= True)
+    #     return ResponseWrapper(status=200, msg="Success", data=serializer.data)
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -285,6 +285,8 @@ class AdminCategoryViewSet(CustomViewSet):
 
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
 
+    # ........***........ NOTE: Discount Apply in Category And Product ........***........
+
     def discount_add_in_category(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data)
@@ -328,6 +330,7 @@ class AdminCategoryViewSet(CustomViewSet):
             return ResponseWrapper(
                 data=serializer.data, msg='Success', status=200
             )
+        
 
         elif product_list:
             for product in product_list:
@@ -340,7 +343,11 @@ class AdminCategoryViewSet(CustomViewSet):
 
             product_list = Product.objects.filter(
                 discount = discount_qs)
-            # serializer = ProdcutSerializer(product_list, many=True)
+            
+            #TODO: Product Serializer Add 
+            
+            # serializer = ProductSerializer(product_list, many=True)
+
             return ResponseWrapper(
                 data=serializer.data, msg='Success', status=200
             )

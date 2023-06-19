@@ -9,6 +9,11 @@ from catalog.models import Category, ProductBrand, TaxCategory
 from store.models import Store
 from django.contrib.postgres.fields import ArrayField
 from discount.models import Discount
+from django.utils.text import slugify
+from django.db.models.signals import post_save, pre_save
+import re
+from utils.generates import unique_slug_generator
+
 
 
 # Create your models here.
@@ -222,3 +227,12 @@ class TransferProduct(models.Model):
     approval_status = models.CharField(max_length=200, null=True,default=False)
     date = models.DateTimeField(auto_now_add=True)
 
+
+# def product_slug_pre_save_receiver(sender, instance, *args, **kwargs):
+    
+#     if not instance.slug:
+#         title = slugify(instance.name.lower())
+#         slug_binding = title + '-' + unique_slug_generator()
+#         instance.slug = title
+
+# pre_save.connect(product_slug_pre_save_receiver, sender=Product)
