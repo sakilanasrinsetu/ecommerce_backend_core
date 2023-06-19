@@ -13,12 +13,12 @@ from django.utils.text import slugify
 from django.db.models.signals import post_save, pre_save
 import re
 from utils.generates import unique_slug_generator
-
+from django.utils import timezone
 
 
 # Create your models here.
 
-class Product(BaseModel):
+class Product(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, unique=True)
 
@@ -112,6 +112,11 @@ class Product(BaseModel):
                                 on_delete=models.CASCADE,
                                 related_name='products',
                                 null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
+    updated_at = models.DateTimeField(auto_now=True,
+                                      editable=False)
 
   
     class Meta:
@@ -126,6 +131,12 @@ class Product(BaseModel):
             models.Index(fields=['name']),
             models.Index(fields=['ordering']),
         ]
+
+    def save(self, *args, **kwargs):
+        # Update the 'updated_at' field before saving the model
+        self.updated_at = timezone.now()
+        super(Product, self).save(*args, **kwargs)
+
 
 class ProductSeller(models.Model):
     product = models.ForeignKey(

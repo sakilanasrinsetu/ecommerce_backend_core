@@ -1,20 +1,4 @@
-from catalog.serializers import (ProductGroupSerializer, CategorySerializer,
-                                 TaxCategorySerializer, ProductBrandSerializer,
-                                 DiscountAddSerializer)
-from catalog.models import ProductGroup, Category, TaxCategory, ProductBrand
-from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny
-from utils.custom_viewset import CustomViewSet
-from rest_framework.permissions import IsAuthenticated
-from utils.response_wrapper import ResponseWrapper
-from catalog.filters import ProductGroupFilter, CategoryFilter, TaxCategoryFilter
-from utils.actions import send_action
-from django.db.models import Q
-from discount.models import Discount
-from products.models import Product
-from utils.calculate import  valid_discount
-
-
+from utils.base import *
 
 class AdminProductGroupViewSet(CustomViewSet):
     queryset = ProductGroup.objects.all()
@@ -53,12 +37,7 @@ class AdminCategoryViewSet(CustomViewSet):
             self.serializer_class = self.serializer_class
 
         return self.serializer_class
-
-
-    # def list(self, request, *args, **kwargs):
-    #     qs = self.queryset.exclude(status = 'child')
-    #     serializer = self.serializer_class(qs, many= True)
-    #     return ResponseWrapper(status=200, msg="Success", data=serializer.data)
+    
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -346,7 +325,7 @@ class AdminCategoryViewSet(CustomViewSet):
             
             #TODO: Product Serializer Add 
             
-            # serializer = ProductSerializer(product_list, many=True)
+            serializer = ProductSerializer(product_list, many=True)
 
             return ResponseWrapper(
                 data=serializer.data, msg='Success', status=200

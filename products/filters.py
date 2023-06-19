@@ -1,2 +1,1 @@
-import django_filters
-from products.models import Product, ProductSerial, ProductVariant, ProductVariantReview
+from utils.base import *
