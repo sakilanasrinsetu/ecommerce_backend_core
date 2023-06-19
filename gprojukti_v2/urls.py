@@ -73,7 +73,7 @@ urlpatterns = [
         path('v2.0/', include(v2_patterns))
                   ])),
         path('api-auth/', include('rest_framework.urls')),
-        path('__debug__/', include(debug_toolbar.urls)),
+        # path('__debug__/', include(debug_toolbar.urls)),
 
               ] + schema_urlpatterns
 

@@ -37,6 +37,7 @@ class AdminProductViewSet(CustomViewSet):
         discount = request.data.get("discount")
         category_list = request.data.get("categories")
         sub_category_list = request.data.get("sub_categories")
+        discount = request.data.get("discount")
 
         qs = self.queryset.filter(name = request.data.get("name")).last()
         if qs:
@@ -94,6 +95,7 @@ class AdminProductViewSet(CustomViewSet):
                     error_msg='Sub Category Not Found',
                     status=406
                 )
+            
             
         qs = serializer.save()
 
