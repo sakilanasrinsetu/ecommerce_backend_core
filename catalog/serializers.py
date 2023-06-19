@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
 from discount.models import Discount
 from products.models import Product
+from discount.serializers import DiscountSerializer
 
 User = get_user_model()
 
@@ -30,6 +31,7 @@ class CategorySerializer(BaseModelSerializer):
 
     def to_representation(self, instance):
         self.fields["product_group"] = ProductGroupSerializer()
+        self.fields["discount"] = DiscountSerializer()
 
         return super(CategorySerializer, self).to_representation(instance)
 

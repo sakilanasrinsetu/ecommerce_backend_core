@@ -11,6 +11,8 @@ from catalog.filters import ProductGroupFilter, CategoryFilter, TaxCategoryFilte
 from utils.actions import send_action
 from django.db.models import Q
 from discount.models import Discount
+from products.models import Product
+from utils.calculate import  valid_discount
 
 
 
@@ -293,8 +295,8 @@ class AdminCategoryViewSet(CustomViewSet):
         
 
         discount_id = serializer.validated_data.get('discount')
-        product_id = serializer.validated_data.get('product')
-        category_id = serializer.validated_data.get('category')
+        product_list = serializer.validated_data.get('product')
+        category_list = serializer.validated_data.get('category')
 
         discount_qs = Discount.objects.filter(pk = discount_id.id).last()
 
@@ -302,8 +304,53 @@ class AdminCategoryViewSet(CustomViewSet):
             return ResponseWrapper( 
                 error_msg='Discount Not Found',
                 error_code=400, status=400)
+        
+        # discount_qs = valid_discount(discount_obj=discount_qs)
 
-        return ResponseWrapper(status=200, msg="Success")
+        if category_list:
+            for category in category_list:
+                category_qs = Category.objects.filter(
+                    pk = category.id
+                ).last()
+                if category_qs:
+                    category_qs.discount = discount_qs
+                    category_qs.save()
+
+                product_qs = Product.objects.filter(
+                    categories = category_qs
+                    ).last()
+                if product_qs:
+                    product_qs.discount = discount_qs
+                    product_qs.save()
+
+            category_list = Category.objects.filter(discount = discount_qs)
+            serializer = CategorySerializer(category_list, many=True)
+            return ResponseWrapper(
+                data=serializer.data, msg='Success', status=200
+            )
+
+        elif product_list:
+            for product in product_list:
+                product_qs = Product.objects.filter(
+                    pk = product.id
+                ).last()
+                if product_qs:
+                    product_qs.discount = discount_qs
+                    product_qs.save()
+
+            product_list = Product.objects.filter(
+                discount = discount_qs)
+            # serializer = ProdcutSerializer(product_list, many=True)
+            return ResponseWrapper(
+                data=serializer.data, msg='Success', status=200
+            )
+
+        else:
+            return ResponseWrapper(
+                status=400,
+                error_msg="Something Went to Wrong",
+                error_code=400
+                )
         
 
 class AdminTaxCategoryViewSet(CustomViewSet):

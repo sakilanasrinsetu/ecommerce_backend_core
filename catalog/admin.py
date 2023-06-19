@@ -13,7 +13,7 @@ class ProductGroupAdmin(admin.ModelAdmin):
 admin.site.register(ProductGroup, ProductGroupAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name',"status" ,"product_group", "category_parent","is_active","is_featured","show_in_ecommerce","ordering","created_at"]
+    list_display = ['id', 'name',"status" ,"product_group", "category_parent","discount","is_active","is_featured","show_in_ecommerce","ordering","created_at"]
 
     class Meta:
         model = Category

@@ -4,7 +4,7 @@ from .models import *
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name',"status" ,"parent_product","is_active","is_featured","show_in_ecommerce","ordering","created_at"]
+    list_display = ['id', 'name',"status","discount" ,"parent_product","is_active","is_featured","show_in_ecommerce","ordering","created_at"]
 
     class Meta:
         model = Product
