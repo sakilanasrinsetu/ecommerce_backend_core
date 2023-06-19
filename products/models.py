@@ -118,7 +118,9 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True,
                                       editable=False)
 
-  
+    def __str__(self):
+        return self.name
+    
     class Meta:
         ordering = ['ordering']
         db_table = 'product_variants'
