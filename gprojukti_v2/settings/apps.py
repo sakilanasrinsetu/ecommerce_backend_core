@@ -27,6 +27,8 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'drf_spectacular',
     'dj_rest_auth.registration',
+    
+    'debug_toolbar'
 ]
 
 LOCAL_APPS = [
@@ -62,6 +64,7 @@ ON_TOP_MIDDLEWARE = [
 
 THIRD_PARTY_MIDDLEWARE = [
     # 'simple_history.middleware.HistoryRequestMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
     ]
 
 DEFAULT_MIDDLEWARE = [
@@ -79,11 +82,11 @@ LOCAL_MIDDLEWARE = [
     # 'base.middleware.RequestResponseLogMiddleware',
 ]
 
-# if DEBUG:
+if DEBUG:
 #     THIRD_PARTY_MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-#     import socket
-#     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-#     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '192.168.0.164']
+    import socket
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '192.168.0.164']
 
 MIDDLEWARE = ON_TOP_MIDDLEWARE + DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 

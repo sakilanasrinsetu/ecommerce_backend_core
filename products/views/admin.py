@@ -11,6 +11,14 @@ class AdminProductViewSet(CustomViewSet):
     # filterset_class = ProductFilter
     permission_classes = (IsAuthenticated,)
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            self.serializer_class = ProductListSerializer
+        else:
+            self.serializer_class = self.serializer_class
+
+        return self.serializer_class
+
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -108,6 +116,7 @@ class AdminProductViewSet(CustomViewSet):
             pass
             
         
+        # serializer = self.serializer_class(qs)
         serializer = self.serializer_class(qs)
         return ResponseWrapper(data = serializer.data, status=200, msg="Success")
 

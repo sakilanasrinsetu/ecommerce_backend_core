@@ -140,6 +140,65 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
 
+    def generate_product_status(self):
+        status = 'standalone'
+        parent_product = None
+
+        parent_product_status = None
+
+        if self.parent_product:
+            parent_product_status = self.parent_product.status
+
+        parent_product_parent_id = None
+        
+        if self.status == 'standalone' and self.parent_product:
+            parent_product = None
+            
+
+        elif self.status == 'parent' and self.parent_product:
+            parent_product = None
+            parent_product = None
+
+        elif self.status == 'child' and not self.parent_product:
+            status = 'standalone'
+        
+        
+        elif self.status == 'child' and self.parent_product:
+            parent_product_status = 'parent'
+            parent_product_parent_id = None
+            status = 'child'
+            parent_product = self.parent_product
+
+
+        return {
+            "status": status,
+            'parent_product': parent_product,
+            'parent_product_status': parent_product_status,
+            'parent_product_parent_id': parent_product_parent_id,
+        }
+
+    def save(self, *args, **kwargs):
+        if not self == self.parent_product:
+            obj = self.generate_product_status()
+            self.status = obj.get('status')
+            self.parent_product = obj.get('parent_product')
+
+            if obj.get('parent_product'):
+                self.parent_product.status = obj.get('parent_product_status')
+                self.parent_product.parent_product = obj.get('parent_product_parent_id')
+
+            if obj.get('status') == 'child' and obj.get('parent_product'):
+                self.is_child = True
+            else:
+                self.is_child = False
+
+            super().save(*args, **kwargs)
+        pass
+
+    # ....***.... For Status Automatically Setup  ....***....
+
+
+
 class ProductSeller(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE,

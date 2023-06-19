@@ -29,6 +29,7 @@ from rest_framework import routers
 from gprojukti_v2.views import (HealthCheckViewset)
 
 router = routers.DefaultRouter()
+import debug_toolbar
 
 
 
@@ -72,6 +73,7 @@ urlpatterns = [
         path('v2.0/', include(v2_patterns))
                   ])),
         path('api-auth/', include('rest_framework.urls')),
+        path('__debug__/', include(debug_toolbar.urls)),
 
               ] + schema_urlpatterns
 
