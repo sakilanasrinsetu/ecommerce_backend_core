@@ -46,3 +46,11 @@ from products.serializers import *
 from products.models import *
 from products.filters import *
 
+
+# Pos Product
+
+from point_of_sale.serializers import *
+from point_of_sale.models import *
+# from point_of_sale.filters import *
+
+print('ABABABABABABABABABABABABABABABABABABABABABAB')

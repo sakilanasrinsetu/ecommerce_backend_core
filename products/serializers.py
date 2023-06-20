@@ -1,7 +1,8 @@
 from utils.base import *
 from rest_framework import serializers
+from point_of_sale.models import POSProductInfo
 
-    
+
 class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -54,6 +55,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     sub_categories = serializers.SerializerMethodField(read_only= True)
     discount = serializers.CharField(source='discount.name', read_only= True)
     rating = serializers.FloatField(read_only = True)
+    pos_product_info = serializers.SerializerMethodField(read_only = True)
 
     class Meta:
         model = Product
@@ -79,6 +81,7 @@ class ProductListSerializer(serializers.ModelSerializer):
             'is_only_pos',
             'sku',
             'discount',
+            'pos_product_info',
         ]
 
     def get_categories(self, obj):
@@ -95,4 +98,27 @@ class ProductListSerializer(serializers.ModelSerializer):
                 obj.sub_categories, many = True
             )
             return serializer.data
+        return None    
+    
+    def get_pos_product_info(self, obj):
+        if obj.pos_product_info:
+            serializer = POSProductInfoSerializer(
+                obj.pos_product_info
+            )
+            return serializer.data
         return None
+
+
+class POSProductInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = POSProductInfo
+        fields = '__all__'
+
+
+class POSProductCreateSerializer(serializers.ModelSerializer):
+    pos_product_info = POSProductInfoSerializer()
+
+    class Meta:
+        model = Product
+        fields = '__all__'

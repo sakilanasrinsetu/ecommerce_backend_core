@@ -20,7 +20,7 @@ class POSUserRegions(models.Model):
     def __str__(self):
         return self.name
 
-class POSProductInfo(BaseModel):
+class POSProductInfo(models.Model):
     maximum_retail_price = models.FloatField(default=0.0)
     minimum_selling_price = models.FloatField(default=0.0)
     barcode_url = models.URLField(default="null", null=True, blank=True )
