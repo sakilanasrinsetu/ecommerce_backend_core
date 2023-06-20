@@ -284,7 +284,8 @@ class AdminCategoryViewSet(CustomViewSet):
         if not discount_qs:
             return ResponseWrapper( 
                 error_msg='Discount Not Found',
-                error_code=400, status=400)
+                error_code=400, status=400
+                )
         
         # discount_qs = valid_discount(discount_obj=discount_qs)
 
@@ -300,14 +301,17 @@ class AdminCategoryViewSet(CustomViewSet):
                 product_qs = Product.objects.filter(
                     categories = category_qs
                     ).last()
+                
                 if product_qs:
                     product_qs.discount = discount_qs
                     product_qs.save()
 
             category_list = Category.objects.filter(discount = discount_qs)
             serializer = CategorySerializer(category_list, many=True)
+
             return ResponseWrapper(
-                data=serializer.data, msg='Success', status=200
+                data=serializer.data, 
+                msg='Success', status=200
             )
         
 
