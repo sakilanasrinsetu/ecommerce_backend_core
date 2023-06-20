@@ -187,4 +187,5 @@ class AdminProductViewSet(CustomViewSet, ProductCore):
         product_qs.save()
 
         serializer = ProductListSerializer(product_qs)
+        
         return ResponseWrapper(data=serializer.data,status=200, msg="Success")
