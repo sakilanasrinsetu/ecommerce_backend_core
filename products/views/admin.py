@@ -126,10 +126,11 @@ class AdminProductViewSet(CustomViewSet, ProductCore):
         serializer = serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            return ResponseWrapper(error_msg=serializer.errors,
-                                   error_code=400,
-                                   status=400
-                                   )
+            return ResponseWrapper(
+                error_msg=serializer.errors,
+                error_code=400,
+                status=400
+                )
         
         qs = self.product_create(serializer)
 
