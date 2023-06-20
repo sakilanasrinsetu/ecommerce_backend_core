@@ -135,6 +135,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         # Update the 'updated_at' field before saving the model
+        
         self.updated_at = timezone.now()
         super(Product, self).save(*args, **kwargs)
 

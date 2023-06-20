@@ -132,6 +132,13 @@ class AdminProductViewSet(CustomViewSet, ProductCore):
                 status=400
                 )
         
+        if request.data.get('is_only_pos') and not request.data.get('pos_product_info'):
+            return ResponseWrapper(
+                error_code=406,
+                error_msg='For POS Product Need Pos Product Info',
+                status=406
+                )
+        
         qs = self.product_create(serializer)
 
         # serializer = self.serializer_class(qs)
@@ -147,6 +154,14 @@ class AdminProductViewSet(CustomViewSet, ProductCore):
                                    error_code=400,
                                    status=400
                                    )
+        
+        if request.data.get('is_only_pos') and not request.data.get('pos_product_info'):
+            return ResponseWrapper(
+                error_code=406,
+                error_msg='For POS Product Need POS Product Info Information',
+                status=406
+                )
+        
         pos_product_info = serializer.validated_data.pop("pos_product_info")
 
         if pos_product_info:
@@ -184,6 +199,7 @@ class AdminProductViewSet(CustomViewSet, ProductCore):
         # POS Product Info Create and Assign in Product Module
 
         product_qs.pos_product_info_id = pos_product_info_qs.id
+        product_qs.is_only_pos = True
         product_qs.save()
 
         serializer = ProductListSerializer(product_qs)
