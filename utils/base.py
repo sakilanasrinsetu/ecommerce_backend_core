@@ -9,8 +9,6 @@ User = get_user_model()
 
 
 # For Serializer
-from rest_framework import serializers
-# from rest_framework.serializers import ModelSerializer
 
 
 # For Filters

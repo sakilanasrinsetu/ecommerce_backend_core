@@ -52,8 +52,7 @@ class Product(models.Model):
     buying_tax_category = models.ForeignKey(
         to=TaxCategory, 
         on_delete=models.CASCADE, related_name='buying_products')
-    is_active = models.BooleanField(default=True)
-    is_featured = models.BooleanField(default=False)
+
 
     # ....***.... After Marge ....***....
 

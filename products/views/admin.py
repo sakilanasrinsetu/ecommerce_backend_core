@@ -19,13 +19,18 @@ class AdminProductViewSet(CustomViewSet):
 
         return self.serializer_class
 
+    # TODO: Normal Product Check
+    # TODO: POS Product Check
 
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            return ResponseWrapper(error_msg=serializer.errors, error_code=400, status=400)
+            return ResponseWrapper(error_msg=serializer.errors,
+                                   error_code=400,
+                                   status=400
+                                   )
         
         name = request.data.get("name")
         status = request.data.get("status")
@@ -37,7 +42,6 @@ class AdminProductViewSet(CustomViewSet):
         discount = request.data.get("discount")
         category_list = request.data.get("categories")
         sub_category_list = request.data.get("sub_categories")
-        discount = request.data.get("discount")
 
         qs = self.queryset.filter(name = request.data.get("name")).last()
         if qs:
@@ -62,6 +66,7 @@ class AdminProductViewSet(CustomViewSet):
                 )
             
             # ....***.... Stand Alone Category Parent Category Check ....***....
+            
             if status=='standalone' and parent_product_qs:
                 return ResponseWrapper(
                     error_code=406, 
@@ -77,7 +82,8 @@ class AdminProductViewSet(CustomViewSet):
                 )
         
         if category_list:
-            category_qs = Category.objects.filter(id__in = category_list).exclude(status = 'child')
+            category_qs = Category.objects.filter(
+                id__in = category_list).exclude(status = 'child')
 
             if not category_qs:
                 return ResponseWrapper(

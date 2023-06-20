@@ -1,4 +1,5 @@
 from utils.base import *
+from rest_framework import serializers
 
 
 class ProductChildSerializer(serializers.ModelSerializer):
@@ -36,9 +37,21 @@ class ProductSerializer(serializers.ModelSerializer):
             return serializer.data
         return None
     
+class CategoryListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = [
+            'id',
+            'name',
+            'status',
+        ]
 
 class ProductListSerializer(serializers.ModelSerializer):
-    parent_product_name = serializers.CharField(source='parent_product.name', read_only= True)
+    parent_product = serializers.CharField(source='parent_product.name', read_only= True)
+    categories = serializers.SerializerMethodField(read_only= True)
+    sub_categories = serializers.SerializerMethodField(read_only= True)
+    discount = serializers.CharField(source='discount.name', read_only= True)
     rating = serializers.FloatField(read_only = True)
 
     class Meta:
@@ -47,8 +60,10 @@ class ProductListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'slug',
+            'categories',
+            'sub_categories',
             'status',
-            'parent_product_name',
+            'parent_product',
             'metaTitle',
             'is_active',
             'is_featured',
@@ -61,5 +76,22 @@ class ProductListSerializer(serializers.ModelSerializer):
             'is_special_day',
             'rating',
             'is_only_pos',
+            'sku',
             'discount',
         ]
+
+    def get_categories(self, obj):
+        if obj.categories:
+            serializer = CategoryListSerializer(
+                obj.categories, many = True
+            )
+            return serializer.data
+        return None
+    
+    def get_sub_categories(self, obj):
+        if obj.sub_categories:
+            serializer = CategoryListSerializer(
+                obj.sub_categories, many = True
+            )
+            return serializer.data
+        return None
