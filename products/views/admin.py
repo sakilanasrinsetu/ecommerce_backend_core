@@ -8,7 +8,7 @@ class AdminProductViewSet(CustomViewSet):
     serializer_class = ProductSerializer
     lookup_field = "pk"
     search_fields = ['name']
-    # filterset_class = ProductFilter
+    filterset_class = ProductFilter
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):

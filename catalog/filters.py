@@ -85,7 +85,6 @@ class CategoryFilter(FilterSet):
         )
     
     def filter_category(self, queryset, name, value):
-        print('vvvvvvvvvvvvvvvvvvvvv')
         group__slug = self.data.get('group__slug')
         has_child = self.data.get('has_child')
         is_featured = self.data.get('is_featured')
