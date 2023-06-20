@@ -1,6 +1,16 @@
 from utils.base import *
 from rest_framework import serializers
 
+    
+class CategoryListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = [
+            'id',
+            'name',
+            'status',
+        ]
 
 class ProductChildSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,15 +30,16 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
 
-    # def to_representation(self, instance):
-    #     self.fields["selling_tax_category"] = TaxCategorySerializer()
-    #     self.fields["buying_tax_category"] = TaxCategorySerializer()
-    #     self.fields["brand"] = ProductBrandSerializer()
-    #     #TODO
-    #     # self.fields["pos_product_info"] = POSProductInfoS()
-    #     self.fields["discount"] = DiscountSerializer()
+    def to_representation(self, instance):
+        self.fields["selling_tax_category"] = TaxCategorySerializer()
+        self.fields["buying_tax_category"] = TaxCategorySerializer()
+        self.fields["brand"] = ProductBrandSerializer()
+        #TODO
+        self.fields["categories"] = CategoryListSerializer(read_only=True, many=True)
+        self.fields["sub_categories"] = CategoryListSerializer(read_only=True, many=True)
+        self.fields["discount"] = DiscountSerializer()
 
-    #     return super(ProductSerializer, self).to_representation(instance)
+        return super(ProductSerializer, self).to_representation(instance)
     
     def get_child(self, obj):
         if obj.status == "parent":
@@ -36,16 +47,6 @@ class ProductSerializer(serializers.ModelSerializer):
             serializer = ProductChildSerializer(qs, many = True)
             return serializer.data
         return None
-    
-class CategoryListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Category
-        fields = [
-            'id',
-            'name',
-            'status',
-        ]
 
 class ProductListSerializer(serializers.ModelSerializer):
     parent_product = serializers.CharField(source='parent_product.name', read_only= True)
