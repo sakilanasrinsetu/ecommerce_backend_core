@@ -56,6 +56,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     discount = serializers.CharField(source='discount.name', read_only= True)
     rating = serializers.FloatField(read_only = True)
     pos_product_info = serializers.SerializerMethodField(read_only = True)
+    discount_price = serializers.SerializerMethodField(read_only = True)
 
     class Meta:
         model = Product
@@ -63,6 +64,8 @@ class ProductListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'slug',
+            'discount_price',
+            'selling_price',
             'categories',
             'sub_categories',
             'status',
@@ -106,7 +109,17 @@ class ProductListSerializer(serializers.ModelSerializer):
                 obj.pos_product_info
             )
             return serializer.data
-        return None
+        return None    
+    
+    def get_discount_price(self, obj):
+        discount_price = None
+        if obj.discount:
+            discount_qs = valid_discount(discount_obj = obj.discount)
+            if discount_qs:
+                discount_price = calculate_discount_price(selling_price = obj.selling_price, discount_obj = obj.discount)
+
+        
+        return discount_price
 
 
 class POSProductInfoSerializer(serializers.ModelSerializer):

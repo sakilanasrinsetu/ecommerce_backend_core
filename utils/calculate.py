@@ -15,3 +15,16 @@ def valid_discount(discount_obj, **kwargs):
 
 
     return is_valid
+
+def calculate_discount_price(selling_price, discount_obj, **kwargs):
+    
+    discounted_price = None
+
+    if discount_obj:
+        if discount_obj.discount_type == 'percentage':
+            discounted_price =selling_price - ((selling_price*discount_obj.amount)/100)
+
+        else:
+            discounted_price =selling_price - discount_obj.amount
+
+    return discounted_price
