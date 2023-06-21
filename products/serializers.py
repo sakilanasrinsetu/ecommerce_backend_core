@@ -116,9 +116,10 @@ class ProductListSerializer(serializers.ModelSerializer):
         if obj.discount:
             discount_qs = valid_discount(discount_obj = obj.discount)
             if discount_qs:
-                discount_price = calculate_discount_price(selling_price = obj.selling_price, discount_obj = obj.discount)
-
-        
+                discount_price = calculate_discount_price(
+                    selling_price = obj.selling_price,
+                    discount_obj = obj.discount
+                    )
         return discount_price
 
 
