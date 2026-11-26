@@ -2,8 +2,6 @@
 
 Django REST API backend for an ecommerce platform, with catalog, product, store, discount, blog, user, and location modules.
 
-**Suggested project name: CommerceCore** — a name that reflects the shared backend for product management and retail operations. This is a naming suggestion; the existing Python package remains `ecommerce_core`.
-
 ## Project image
 
 ![Existing project database entity relationship diagram](erd.png)
