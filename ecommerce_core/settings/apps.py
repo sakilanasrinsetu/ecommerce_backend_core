@@ -1,4 +1,4 @@
-from gprojukti_v2.settings.base import DEBUG
+from ecommerce_core.settings.base import DEBUG
 
 # Application definition
 
@@ -90,9 +90,9 @@ LOCAL_MIDDLEWARE = [
 
 MIDDLEWARE = ON_TOP_MIDDLEWARE + DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 
-ROOT_URLCONF = 'gprojukti_v2.urls'
+ROOT_URLCONF = 'ecommerce_core.urls'
 
-WSGI_APPLICATION = 'gprojukti_v2.wsgi.application'
+WSGI_APPLICATION = 'ecommerce_core.wsgi.application'
 
 TEMPLATES = [
     {

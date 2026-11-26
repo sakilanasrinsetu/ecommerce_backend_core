@@ -3,7 +3,7 @@ from base.models import BaseModel, TaxTypes, CustomQuerySetManager,StructureChoi
 from django.core.exceptions import  ValidationError
 from django.utils.translation import gettext_lazy as _
 from discount.models import Discount
-from gprojukti_v2.settings.app_vars import TODAY, CURRENT_TIME
+from ecommerce_core.settings.app_vars import TODAY, CURRENT_TIME
 
 # Create your models here.
 

@@ -1,4 +1,4 @@
-"""gprojukti_v2 URL Configuration
+"""ecommerce_core URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -26,7 +26,7 @@ from drf_spectacular.views import (
 )
 from rest_framework import routers
 
-from gprojukti_v2.views import (HealthCheckViewset)
+from ecommerce_core.views import (HealthCheckViewset)
 
 router = routers.DefaultRouter()
 import debug_toolbar

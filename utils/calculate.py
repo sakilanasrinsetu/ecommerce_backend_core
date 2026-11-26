@@ -1,5 +1,5 @@
 from discount.models import Discount
-from gprojukti_v2.settings.app_vars import TODAY, CURRENT_TIME
+from ecommerce_core.settings.app_vars import TODAY, CURRENT_TIME
 
 def valid_discount(discount_obj, **kwargs):
     is_valid = False

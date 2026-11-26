@@ -1,6 +1,6 @@
 import os
 from decouple import config
-from gprojukti_v2.settings.base import BASE_DIR
+from ecommerce_core.settings.base import BASE_DIR
 from django.utils import timezone
 from datetime import date, datetime, timedelta
 

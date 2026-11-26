@@ -1,5 +1,5 @@
 import os
-from gprojukti_v2.settings.base import config
+from ecommerce_core.settings.base import config
 
 LOGGING = {
     'version': 1,

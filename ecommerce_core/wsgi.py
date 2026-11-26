@@ -1,5 +1,5 @@
 """
-WSGI config for gprojukti_v2 project.
+WSGI config for ecommerce_core project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gprojukti_v2.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ecommerce_core.settings')
 
 application = get_wsgi_application()

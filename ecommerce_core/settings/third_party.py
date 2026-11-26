@@ -1,5 +1,5 @@
-from gprojukti_v2.settings import DEBUG, REDIS_HOST, RABBITMQ_URL
-from gprojukti_v2.settings.base import timedelta, SECRET_KEY
+from ecommerce_core.settings import DEBUG, REDIS_HOST, RABBITMQ_URL
+from ecommerce_core.settings.base import timedelta, SECRET_KEY
 
 REST_FRAMEWORK = {
 
@@ -8,7 +8,7 @@ REST_FRAMEWORK = {
     ),
 
     # 'DEFAULT_RENDERER_CLASSES': (
-    #     # 'gprojukti_v2.apis.renderers.DefaultRenderer',
+    #     # 'ecommerce_core.apis.renderers.DefaultRenderer',
     # ),
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

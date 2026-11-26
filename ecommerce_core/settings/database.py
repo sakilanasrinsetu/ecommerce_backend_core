@@ -1,5 +1,5 @@
-from gprojukti_v2.settings.base import config, environ, env
-from gprojukti_v2.settings.app_vars import DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT, BASE_DIR
+from ecommerce_core.settings.base import config, environ, env
+from ecommerce_core.settings.app_vars import DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT, BASE_DIR
 
 if config('DATABASE_URL'):
     DATABASES = {
